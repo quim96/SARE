@@ -7,9 +7,17 @@ var OrderDetailView = Backbone.View.extend({
     this.template = _.template(t_orderDetail);
   },
 
+  events: {
+    'click .remove-icon': 'hide'
+  },
+
   render: function () {
     this.$el.html(this.template({order: this.model}))
     return this
+  },
+
+  hide: function() {
+    this.eventBus.trigger('view:orderDetail:hide')
   }
 
 });
