@@ -1,7 +1,7 @@
 var tl_order = require("raw-loader!../../../templates/order/tl_order.html")
 var OrderItemView = require('./v_orderItem')
 var OrderDetailView = require('./v_orderDetail')
-
+var OrderCreateView = require('./v_orderCreate')
 
 var OrderListView = Backbone.View.extend({
 
@@ -13,9 +13,12 @@ var OrderListView = Backbone.View.extend({
 
     this.localEventBus.on('view:order:detail', this.showDetail.bind(this))
     this.localEventBus.on('view:orderDetail:hide', this.hideDetail.bind(this))
+    this.localEventBus.on('view:orderCreate:hide', this.hideDetail.bind(this))
   },
 
-  className: 'container',
+  events: {
+    'click .glyphicon-plus-sign' : 'showCreate'
+  },
 
   render: function () {
     this.$el.html(this.template({orders: this.collection}))
@@ -40,6 +43,14 @@ var OrderListView = Backbone.View.extend({
     var $orderDetail = this.$el.find('.order-detail')
     $orderDetail.hide()
     this.$el.find('.order-list').addClass('col-md-12').removeClass('col-md-9')
+  },
+
+  showCreate: function() {
+    this.$el.find('.order-list').addClass('col-md-9').removeClass('col-md-12')
+    var $orderDetail = this.$el.find('.order-detail')
+    var localEventBus = this.localEventBus
+    new OrderCreateView({el: $orderDetail, eventBus: localEventBus}).render()
+    $orderDetail.show()
   }
 
 });
