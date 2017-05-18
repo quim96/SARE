@@ -9,6 +9,8 @@ var OrderListView = Backbone.View.extend({
     this.eventBus = params.eventBus;
     this.template = _.template(tl_order)
 
+    this.lastDetail = null
+
     this.localEventBus = _.extend({}, Backbone.Events)
 
     this.localEventBus.on('view:order:detail', this.showDetail.bind(this))
@@ -17,7 +19,7 @@ var OrderListView = Backbone.View.extend({
   },
 
   events: {
-    'click .glyphicon-plus-sign' : 'showCreate'
+    'click [data-action="new"]' : 'showCreate'
   },
 
   render: function () {
@@ -31,17 +33,27 @@ var OrderListView = Backbone.View.extend({
     return this
   },
 
+  clearDetail: function() {
+    if (this.lastDetail) this.lastDetail.undelegateEvents()
+  },
+
+  switchDetail: function(view) {
+    this.clearDetail()
+    this.lastDetail = view
+  },
+
   showDetail: function(id) {
     this.$el.find('.order-list').addClass('col-md-9').removeClass('col-md-12')
     var $orderDetail = this.$el.find('.order-detail')
     var localEventBus = this.localEventBus
-    new OrderDetailView({el: $orderDetail, model: this.collection.get(id), eventBus: localEventBus}).render()
+    this.switchDetail(new OrderDetailView({el: $orderDetail, model: this.collection.get(id), eventBus: localEventBus}).render())
     $orderDetail.show()
   },
 
   hideDetail: function() {
     var $orderDetail = this.$el.find('.order-detail')
     $orderDetail.hide()
+    this.clearDetail()
     this.$el.find('.order-list').addClass('col-md-12').removeClass('col-md-9')
   },
 
@@ -49,7 +61,7 @@ var OrderListView = Backbone.View.extend({
     this.$el.find('.order-list').addClass('col-md-9').removeClass('col-md-12')
     var $orderDetail = this.$el.find('.order-detail')
     var localEventBus = this.localEventBus
-    new OrderCreateView({el: $orderDetail, eventBus: localEventBus}).render()
+    this.switchDetail(new OrderCreateView({el: $orderDetail, eventBus: localEventBus}).render())
     $orderDetail.show()
   }
 
