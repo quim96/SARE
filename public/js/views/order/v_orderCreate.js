@@ -1,4 +1,6 @@
 var t_orderCreate = require("raw-loader!../../../templates/order/t_orderCreate.html")
+var Order = require('../../models/m_order')
+
 
 var OrderCreateView = Backbone.View.extend({
 
@@ -8,7 +10,8 @@ var OrderCreateView = Backbone.View.extend({
   },
 
   events: {
-    'click .remove-icon': 'hide'
+    'click .remove-icon': 'hide',
+    'click [type="submit"]' : 'createOrder'
   },
 
   render: function () {
@@ -18,6 +21,19 @@ var OrderCreateView = Backbone.View.extend({
 
   hide: function() {
     this.eventBus.trigger('view:orderCreate:hide')
+  },
+
+  createOrder: function() {
+    var data = {
+      description: this.$el.find('[name="description"]').val()
+    }
+    var eventBus = this.eventBus
+    var order = new Order()
+    order.save(data, {
+      success: function(order) {
+        eventBus.trigger('view:orderCreate:created', order)
+      }
+    })
   }
 
 });
