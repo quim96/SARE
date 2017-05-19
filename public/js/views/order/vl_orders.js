@@ -70,6 +70,7 @@ var OrderListView = Backbone.View.extend({
   },
 
   orderCreated: function(order) {
+    this.hideDetail()
     this.collection.add(order)
   },
 
