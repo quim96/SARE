@@ -13,6 +13,7 @@ var OrderListView = Backbone.View.extend({
 
     this.localEventBus = _.extend({}, Backbone.Events)
 
+
     this.localEventBus.on('view:order:detail', this.showDetail.bind(this))
     this.localEventBus.on('view:orderDetail:hide', this.hideDetail.bind(this))
     this.localEventBus.on('view:orderCreate:hide', this.hideDetail.bind(this))
