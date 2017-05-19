@@ -13,10 +13,13 @@ var OrderListView = Backbone.View.extend({
 
     this.localEventBus = _.extend({}, Backbone.Events)
 
+    this.listenTo(this.collection, 'add', this.appendOrder)
 
     this.localEventBus.on('view:order:detail', this.showDetail.bind(this))
     this.localEventBus.on('view:orderDetail:hide', this.hideDetail.bind(this))
     this.localEventBus.on('view:orderCreate:hide', this.hideDetail.bind(this))
+
+    this.listenTo(this.localEventBus, 'view:orderCreate:created', this.orderCreated)
   },
 
   events: {
@@ -64,6 +67,16 @@ var OrderListView = Backbone.View.extend({
     var localEventBus = this.localEventBus
     this.switchDetail(new OrderCreateView({el: $orderDetail, eventBus: localEventBus}).render())
     $orderDetail.show()
+  },
+
+  orderCreated: function(order) {
+    this.collection.add(order)
+  },
+
+  appendOrder: function(order) {
+    var $orderList = this.$el.find('.list-group')
+    var localEventBus = this.localEventBus
+    $orderList.append(new OrderItemView({model: order, eventBus: localEventBus}).render().el)
   }
 
 });
