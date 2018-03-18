@@ -12,7 +12,7 @@ var userSchemaLogin = {
             required: true
         }
     }
-}
+};
 
 var userSchemaRegister = {
     properties: {
@@ -29,7 +29,7 @@ var userSchemaRegister = {
             required: true
         }
     }
-}
+};
 
 
 module.exports = function (server, router) {
@@ -130,4 +130,4 @@ module.exports = function (server, router) {
         }
     })
 
-}
+};
