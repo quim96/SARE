@@ -1,14 +1,14 @@
 var fs = require('fs');
 var path = require('path');
 var Sequelize = require('sequelize');
-var http = require('http');
+var http = require('http')
 var console = require('console');
 
 var db = {}
 
 var force = true
 
-db.init = function (env) {
+db.init = function(env) {
 
     console.log("Configuring database for environment: " + env);
 
@@ -19,7 +19,7 @@ db.init = function (env) {
             password: "",
             host: "127.0.0.1",
             port: 3306
-        };
+        }
     } else if ('openshift' === env) {
         var db_credentials = {
             dbname: process.env.OPENSHIFT_APP_NAME,
@@ -27,7 +27,7 @@ db.init = function (env) {
             password: process.env.OPENSHIFT_MYSQL_DB_PASSWORD,
             host: process.env.OPENSHIFT_MYSQL_DB_HOST,
             port: process.env.OPENSHIFT_MYSQL_DB_PORT
-        };
+        }
         force = false;
     } else {
         var db_credentials = {
@@ -36,7 +36,7 @@ db.init = function (env) {
             password: "apidb",
             host: "127.0.0.1",
             port: 3306
-        };
+        }
         force = false;
     }
 
@@ -60,7 +60,7 @@ db.init = function (env) {
             fs.readdirSync(__dirname).filter(function (file) {
                 return (file.indexOf('.') !== 0) && (file !== 'index.js')
             }).forEach(function (file) {
-                var model = sequelize.import(path.join(__dirname, file));
+                var model = sequelize.import(path.join(__dirname, file))
                 db[model.name] = model;
             });
 
@@ -72,6 +72,6 @@ db.init = function (env) {
 
             return sequelize.sync({force: force});
         })
-};
+}
 
-module.exports = db;
+module.exports = db

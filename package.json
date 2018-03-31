@@ -1,23 +1,22 @@
 {
   "name": "nodebb",
-  "version": "0.0.3",
+  "version": "0.0.2",
   "private": true,
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
-    "bcrypt-nodejs": "*",
-    "body-parser": "*",
-    "cors": "*",
     "express": "^4",
-    "express-session": "*",
-    "method-override": "*",
-    "morgan": "*",
-    "mysql": "*",
-    "npm": "^5.8.0",
-    "sequelize": "^3",
     "serve-favicon": "*",
-    "serve-static": "*",
-    "underscore": "*"
+    "underscore": "*",
+    "sequelize": "^3",
+    "mysql": "*",
+    "cors": "*",
+    "bcrypt-nodejs": "*",
+    "express-session": "*",
+    "body-parser": "*",
+    "morgan": "*",
+    "method-override": "*",
+    "serve-static": "*"
   }
 }

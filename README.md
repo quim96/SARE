@@ -21,7 +21,7 @@ To run the application:
 - Execute `npm install` inside the `public` folder
 - Execute `npm run webpack` inside the `public` folder
 - Execute `node server.js` at the root of the project
-- Load `http://localhost:3000`
+- Load `http://localhost:8080`
 
 Remember that everytime that you change any javascript file inside the `public` folder, you have to run `npm run webpack` to regenerate the file `main.min.js` and see the changes
 
@@ -86,13 +86,5 @@ Both client and server are in the same folder tree. The server app is located at
 
 ```
 
-## Branch structure
 
-There are 5 extra branches (```exn-*```) that show 5 exercices on how to expand the app. The branches are:
-
-- ```ex1-item-view```: it shows how to add a Backbone view to render all the item in the list
-- ```ex2-view-detail```: it adds an event to each item to show the details dynamically to the right of the view
-- ```ex3-hide-detail```: add a close button for the detail view
-- ```ex4-create-order```: add a menu option to create a new order
-- ```ex5-delete-order```: add a menu option to delete an order
 
