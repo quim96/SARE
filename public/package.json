@@ -2,29 +2,30 @@
   "private": true,
   "dependencies": {
     "backbone": "^1.3.3",
-    "underscore": "^1.8.3",
-    "jquery": "^3.1.1",
-    "bootstrap": "^4.0.0"
+    "bootstrap": "^4.0.0",
+    "jquery": "^3.3.1",
+    "popper.js": "^1.14.1",
+    "underscore": "^1.8.3"
   },
   "devDependencies": {
-    "raw-loader": "*",
-    "webpack": "2.2",
-    "exports-loader": "*",
-    "imports-loader": "*",
-    "babel-loader": "*",
     "babel-core": "*",
+    "babel-loader": "*",
     "bootstrap-loader": "*",
     "bootstrap-sass": "*",
-    "style-loader": "*",
     "css-loader": "*",
+    "exports-loader": "*",
+    "extract-text-webpack-plugin": "^2.1.0",
+    "file-loader": "*",
+    "font-awesome": "*",
+    "font-awesome-loader": "*",
+    "imports-loader": "*",
+    "node-sass": "*",
+    "raw-loader": "*",
     "resolve-url-loader": "*",
     "sass-loader": "*",
-    "node-sass": "*",
-    "extract-text-webpack-plugin": "^2.1.0",
+    "style-loader": "*",
     "url-loader": "*",
-    "file-loader": "*",
-    "font-awesome-loader": "*",
-    "font-awesome": "*"
+    "webpack": "^2.2.1"
   },
   "scripts": {
     "webpack": "webpack"
