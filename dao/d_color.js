@@ -16,8 +16,8 @@ module.exports = function (app, dao) {
             })
     };
     Color.getAllColors = function () {
-        return dao.Color.findAll({
-            order: ['nom', 'DESC']
+        return db.Color.findAll({
+            order: [['nom', 'ASC']]
         });
     };
 
