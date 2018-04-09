@@ -1,23 +1,23 @@
-var tl_order = require("raw-loader!../../../templates/order/tl_order.html")
-var OrderItemView = require('./v_orderItem')
-var OrderDetailView = require('./v_orderDetail')
-var OrderCreateView = require('./v_orderCreate')
+var tl_order = require("raw-loader!../../../templates/order/tl_order.html");
+var OrderItemView = require('./v_orderItem');
+var OrderDetailView = require('./v_orderDetail');
+var OrderCreateView = require('./v_orderCreate');
 
 var OrderListView = Backbone.View.extend({
 
     initialize: function(params) {
         this.eventBus = params.eventBus;
-        this.template = _.template(tl_order)
+        this.template = _.template(tl_order);
 
-        this.lastDetail = null
+        this.lastDetail = null;
 
-        this.localEventBus = _.extend({}, Backbone.Events)
+        this.localEventBus = _.extend({}, Backbone.Events);
 
-        this.listenTo(this.collection, 'add', this.appendOrder)
+        this.listenTo(this.collection, 'add', this.appendOrder);
 
-        this.localEventBus.on('view:order:detail', this.showDetail.bind(this))
-        this.localEventBus.on('view:orderDetail:hide', this.hideDetail.bind(this))
-        this.localEventBus.on('view:orderCreate:hide', this.hideDetail.bind(this))
+        this.localEventBus.on('view:order:detail', this.showDetail.bind(this));
+        this.localEventBus.on('view:orderDetail:hide', this.hideDetail.bind(this));
+        this.localEventBus.on('view:orderCreate:hide', this.hideDetail.bind(this));
 
         this.listenTo(this.localEventBus, 'view:orderCreate:created', this.orderCreated)
     },
@@ -29,12 +29,12 @@ var OrderListView = Backbone.View.extend({
     render: function () {
         this.$el.html(this.template({orders: this.collection}))
         var $orderList = this.$el.find('.list-group')
-        var localEventBus = this.localEventBus
+        var localEventBus = this.localEventBus;
+        console.log(this.collection);
         this.collection.each(function(order) {
             $orderList.append(new OrderItemView({model: order, eventBus: localEventBus}).render().el)
-        })
-
-        return this
+        });
+        return this;
     },
 
     clearDetail: function() {
@@ -62,11 +62,10 @@ var OrderListView = Backbone.View.extend({
     },
 
     showCreate: function() {
-        console.log('Creant...');
         this.$el.find('.order-list').addClass('col-md-9').removeClass('col-md-12')
         var $orderDetail = this.$el.find('.order-detail')
         var localEventBus = this.localEventBus
-        this.switchDetail(new OrderCreateView({el: $orderDetail, eventBus: localEventBus}).render())
+        this.switchDetail(new OrderCreateView({el: $orderDetail, eventBus: localEventBus}).render());
         $orderDetail.show()
     },
 

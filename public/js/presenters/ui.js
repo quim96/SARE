@@ -1,14 +1,17 @@
 var EventBus = require('../eventBus')
 var localStorage = require('../localStorage')
 var CollectionOrder = require("../collections/c_orders")
+var CollectionColor = require("../collections/c_colors")
 var UserLogin = require("../views/user/v_login")
 var UserSignup = require("../views/user/v_signup")
 var HeaderView = require("../views/header")
 var OrdersView = require("../views/order/vl_orders")
+var ColorView = require("../views/color/vl_colors")
 
 var Ui = {}
 
 var orderList = new CollectionOrder({eventBus: EventBus})
+var colorList = new CollectionColor ({eventBus: EventBus})
 
 var $content = $('#content')
 
@@ -17,6 +20,8 @@ var lastContent = null
 
 Ui.switchContent = function (widget) {
     if (lastContent) lastContent.undelegateEvents()
+
+    lastHeader = new HeaderView({el: '#header', eventBus: EventBus, user: localStorage.getItem('user')}).render()
 
     var args = Array.prototype.slice.call(arguments)
     args.shift()
@@ -38,8 +43,20 @@ Ui.switchContent = function (widget) {
                     error: Ui.error
                 });
             } else
-                Ui.switchContent('login')
-            break
+                Ui.switchContent('login');
+            break;
+        }
+        case 'colors': {
+            if (localStorage.hasItem('user')) {
+                colorList.fetch({
+                    success: function () {
+                        lastContent = new ColorView({el: $content, eventBus: EventBus, collection: colorList}).render();
+                    },
+                    error: Ui.error
+                });
+            } else
+                Ui.switchContent('login');
+            break;
         }
     }
 }
@@ -50,8 +67,6 @@ Ui.init = function () {
 };
 
 Ui.showHome = function () {
-    if (lastHeader) lastHeader.undelegateEvents()
-    lastHeader = new HeaderView({el: '#header', eventBus: EventBus, user: localStorage.getItem('user')}).render()
     if (localStorage.hasItem('user')) {
         Ui.switchContent('orders')
     } else {
@@ -79,6 +94,7 @@ EventBus.on('ui:showHome', Ui.showHome);
 EventBus.on('ui:showError', Ui.error);
 EventBus.on('ui:switch:signup', Ui.showSignup);
 EventBus.on('ui:switch:orders', Ui.switchContent.bind(null, 'orders'));
+EventBus.on('ui:switch:colors', Ui.switchContent.bind(null, 'colors'));
 
 module.exports = Ui;
 

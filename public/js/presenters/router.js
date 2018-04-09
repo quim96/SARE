@@ -4,34 +4,39 @@ var localStorage = require('../localStorage')
 var Router = {}
 
 Router.init = function () {
-  var AppRouter = Backbone.Router.extend({
-    routes: {
-      // Define some URL routes
-      '': 'home',
-      'signup': 'signup',
-      'login': 'home',
-      'orders': 'showOrders',
+    var AppRouter = Backbone.Router.extend({
+        routes: {
+            // Define some URL routes
+            '': 'home',
+            'signup': 'signup',
+            'login': 'home',
+            'orders': 'showOrders',
+            'colors': 'showColors',
 
-      // Default
-      '*actions': 'defaultAction'
-    },
+            // Default
+            '*actions': 'defaultAction'
+        },
 
-    home: function () {
-      EventBus.trigger('ui:showHome')
-    },
+        home: function () {
+            EventBus.trigger('ui:showHome')
+        },
 
-    signup: function () {
-      EventBus.trigger('ui:switch:signup')
-    },
+        signup: function () {
+            EventBus.trigger('ui:switch:signup')
+        },
 
-    showOrders: function () {
-      EventBus.trigger('ui:switch:orders')
-    }
-  })
+        showOrders: function () {
+            EventBus.trigger('ui:switch:orders')
+        },
 
-  new AppRouter()
+        showColors: function () {
+            EventBus.trigger('ui:switch:colors')
+        }
+    })
 
-  Backbone.history.start()
+    new AppRouter()
+
+    Backbone.history.start()
 }
 
 module.exports = Router

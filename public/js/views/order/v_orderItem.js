@@ -22,4 +22,4 @@ var OrderItemView = Backbone.View.extend({
 
 });
 
-module.exports = OrderItemView
+module.exports = OrderItemView;

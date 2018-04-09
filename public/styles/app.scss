@@ -19,3 +19,40 @@
   top: 5px;
   right: 5px;
 }
+
+.createEdit {
+  float: right;
+  font-size: 33px;
+  cursor: pointer;
+}
+.editDelete {
+  font-size: 19px;
+  float: right;
+  cursor: pointer;
+}
+
+.titolPag {
+  display: inline;
+}
+
+.titolPagEdit {
+  display: inline;
+}
+
+.table {
+  margin-top: 10px;
+}
+
+.crearEditar {
+  width: 600px;
+  margin: 0 auto;
+}
+
+.espai {
+  padding: 8px;
+}
+
+.border {
+  border: 0.5px solid black;
+  padding: 10px;
+}
