@@ -1,9 +1,9 @@
-var t_orderItem = require("raw-loader!../../../templates/order/t_orderItem.html")
+var t_colorItem = require("raw-loader!../../../templates/color/t_colorItem.html")
 
-var OrderItemView = Backbone.View.extend({
+var ColorItemView = Backbone.View.extend({
     initialize: function(params) {
         this.eventBus = params.eventBus;
-        this.template = _.template(t_orderItem);
+        this.template = _.template(t_colorItem);
     },
 
     events: {
@@ -11,7 +11,7 @@ var OrderItemView = Backbone.View.extend({
     },
 
     render: function () {
-        this.$el.html(this.template({order: this.model}))
+        this.$el.html(this.template({item: this.model}))
         return this
     },
 
@@ -21,4 +21,4 @@ var OrderItemView = Backbone.View.extend({
 
 });
 
-module.exports = OrderItemView;
+module.exports = ColorItemView;

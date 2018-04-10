@@ -1,9 +1,8 @@
 var tl_color = require("raw-loader!../../../templates/color/tl_color.html");
 var Color = require('../../models/m_color')
-
+var ColorItemView = require('./v_colorItem');
 
 var ColorListView = Backbone.View.extend({
-
     initialize: function(params) {
         this.eventBus = params.eventBus;
         this.template = _.template(tl_color);
@@ -17,14 +16,24 @@ var ColorListView = Backbone.View.extend({
     events: {
         'click .crear' : 'showCreate',
         'click .tornar' : 'showContent',
-        'click .enviar' : 'create'
+        'click .enviar' : 'create',
+        'click .fa-edit': 'edit'
     },
 
     render: function () {
         this.$el.html(this.template({colors: this.collection}));
         this.showContent();
-
+        var localEventBus = this.localEventBus;
+        $table = this.$el.find('#taula');
+        this.collection.each(function(item) {
+            $table.append(new ColorItemView({model: item, eventBus: localEventBus}).render().el.childNodes);
+        });
         return this;
+    },
+
+    edit: function(element) {
+        console.log($(element.currentTarget).closest('tr').attr('id'));
+        aux = $(element.currentTarget);
     },
 
     showCreate: function() {

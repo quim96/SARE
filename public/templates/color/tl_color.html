@@ -5,7 +5,7 @@
             <a class="contingut createEdit crear fa fa-plus" title="Crear"></a>
             <div class="clear espai"></div>
             <div class="col-md-12">
-                <table class="table table-striped table-bordered">
+                <table id="taula" class="table table-striped table-bordered">
                     <thead>
                         <tr>
                             <th scope="col">ID</th>
@@ -14,13 +14,7 @@
                         </tr>
                     </thead>
                     <tbody class="t_body">
-                        <% this.collection.each(function(item) { %>
-                        <tr>
-                            <td><%= item.get('id')%></td>
-                            <td><%= item.get('nom')%></td>
-                            <td><a class="editDelete fa fa-ban" title="Esborrar"></a>&nbsp;<a class="editDelete fa fa-edit" title="Editar"></a></td>
-                        </tr>
-                        <% }); %>
+
                     </tbody>
                 </table>
             </div>
