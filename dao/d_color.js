@@ -24,6 +24,12 @@ module.exports = function (app, dao) {
     Color.create = function (color_data, user, t) {
         return db.Color.create(color_data, util.addTrans(t, {}))
     };
+    Color.update = function (color_data, user, t) {
+        return db.Color.update(color_data, { where: {id: color_data.id} }, util.addTrans(t, {}))
+    };
+    Color.delete = function (id, t) {
+        return db.Color.destroy(util.addTrans(t, {where: {id: id}}));
+    };
 
     return Color;
 };

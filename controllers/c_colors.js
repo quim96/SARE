@@ -21,6 +21,33 @@ module.exports = function (app) {
                 .catch(util.sendError.bind(util, res, 400, util.Error.ERR_BAD_REQUEST))
                 .done();
         },
+        edit: function (req, res) {
+            util.checkParams(req.body, ['nom']);
+            util.checkParams(req.body, ['id']);
+
+            db.sequelize.transaction(function (t) {
+                return dao.User.getById(req.session.userId, t)
+                    .then(function (user) {
+                        if (!user) util.sendError(400, util.Error.ERR_ENTITY_NOT_FOUND, "User from session does not exist");
+                        else {
+                            return dao.Color.update(req.body, user, t).then(function(item) {
+                                return req.body;
+                            })
+                        }
+                    })
+            })
+                .then(util.jsonResponse.bind(util, res))
+                .catch(util.sendError.bind(util, res, 400, util.Error.ERR_BAD_REQUEST))
+                .done();
+        },
+        esborrar: function (req, res) {
+            util.checkParams(req.params, ['id']);
+
+            dao.Color.delete(req.params.id)
+                .then(util.jsonResponse.bind(util, res))
+                .catch(util.sendError.bind(util, res, 400, util.Error.ERR_BAD_REQUEST))
+                .done();
+        },
         getAll: function (req, res) {
             dao.Color.getAllColors()
                 .then(util.jsonResponse.bind(util, res))

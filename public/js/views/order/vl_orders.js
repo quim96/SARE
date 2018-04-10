@@ -47,7 +47,6 @@ var OrderListView = Backbone.View.extend({
     },
 
     showDetail: function(id) {
-        console.log(id);
         this.$el.find('.order-list').addClass('col-md-9').removeClass('col-md-12');
         var $orderDetail = this.$el.find('.order-detail');
         var localEventBus = this.localEventBus;
