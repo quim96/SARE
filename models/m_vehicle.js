@@ -14,6 +14,9 @@ module.exports = function(sequelize, DataTypes) {
             },
             associate : function(models) {
                 Vehicle.belongsTo(models.Matricula)
+            },
+            associate : function(models) {
+                Vehicle.belongsTo(models.User)
             }
 
 		}
