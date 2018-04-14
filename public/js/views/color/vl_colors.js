@@ -22,7 +22,9 @@ var ColorListView = Backbone.View.extend({
         'click #btnEsborrar' : 'delete'
     },
     render: function () {
+        this.eventBus.trigger('tab:change', 'color');
         this.$el.html(this.template({colors: this.collection}));
+        console.log(this.$el.find('#nav_color'));
         this.showContent();
         var localEventBus = this.localEventBus;
         $table = this.$el.find('#taula');
@@ -85,7 +87,7 @@ var ColorListView = Backbone.View.extend({
     showDelete: function(id) {
         colorEdit =  this.collection.get(id);
         console.log(colorEdit);
-        this.$el.find('#esborrarCol').text(colorEdit.get(nom));
+        this.$el.find('#esborrarCol').text(colorEdit.get('nom'));
         this.$el.find('#popup').modal();
     },
     delete: function () {

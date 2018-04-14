@@ -3,19 +3,24 @@
  */
 
 module.exports = function(sequelize, DataTypes) {
-	var Tiquet = sequelize.define('Tiquet', {
-		import : DataTypes.STRING(1024),
-		dataInici : {
-			type: DataTypes.DATE
-		},
+    var Tiquet = sequelize.define('Tiquet', {
+        import : DataTypes.INTEGER,
+        dataInici : {
+            type: DataTypes.DATE
+        },
         dataFi : {
             type: DataTypes.DATE
         }
-	}, {
-		classMethods : {
+    }, {
+        classMethods : {
+            associate : function(models) {
+                Tiquet.belongsTo(models.Matricula)
+            },
+            associate : function(models) {
+                Tiquet.belongsTo(models.Zona)
+            }
+        }
+    });
 
-		}
-	});
-
-	return Tiquet;
+    return Tiquet;
 };
