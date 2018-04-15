@@ -45,34 +45,44 @@ var AreaListView = Backbone.View.extend({
         var src_nom = this.$el.find('#txt_nom').val();
         var src_preuMin = this.$el.find('#txt_preuMin').val();
         var src_maxMin = this.$el.find('#txt_maxMin').val();
-        itemCerca = [];
-        tt = this.collection;
-        this.collection.each(function(item) {
-            if (src_id != "" && item.get("id").toString().toLowerCase().includes(src_id.toLowerCase())) {
-                itemCerca.push(item);
-            } else if (src_id != "" && itemCerca.indexOf(src_id) != -1){
-                itemCerca.splice(0, itemCerca.indexOf(src_id));
-            }
+        var itemCerca = this.collection;
+        aux = itemCerca;
+        if (src_id != "" ) {
+            aux.forEach(function (item) {
+                if (src_id != "" && item.get("id").toString().toLowerCase().includes(src_id.toLowerCase())) {
+                    itemCerca.push(item);
+                }
+            });
+        }
+        if (src_nom != "" ) {
+            aux = itemCerca;
+            itemCerca = [];
+            aux.forEach(function (item) {
+                if (src_nom != "" && item.get("nom").toString().toLowerCase().includes(src_nom.toLowerCase())) {
+                    itemCerca.push(item);
+                }
+            });
+        }
+        if (src_preuMin != "" ) {
+            aux = itemCerca;
+            itemCerca = [];
+            aux.forEach(function (item) {
+                if (src_preuMin != "" && item.get("preuMinut").toString().toLowerCase().includes(src_preuMin.toLowerCase())) {
+                    itemCerca.push(item);
+                }
+            });
+        }
+        if (src_maxMin != "" ) {
+            aux = itemCerca;
+            itemCerca = [];
+            aux.forEach(function (item) {
+                if (src_maxMin != "" && item.get("maxMinuts").toString().toLowerCase().includes(src_maxMin.toLowerCase())) {
+                    itemCerca.push(item);
+                }
+            });
+        }
 
-            if (src_nom != "" && item.get("nom").toString().toLowerCase().includes(src_nom.toLowerCase())) {
-                itemCerca.push(item);
-            } else if (src_nom != "" && itemCerca.indexOf(src_nom) != -1){
-                itemCerca.splice(0, itemCerca.indexOf(src_nom));
-            }
 
-            if (src_preuMin != "" && item.get("preuMinut").toString().toLowerCase().includes(src_preuMin.toLowerCase())) {
-                itemCerca.push(item);
-            } else if (src_preuMin != "" && itemCerca.indexOf(src_preuMin) != -1){
-                itemCerca.splice(0, itemCerca.indexOf(src_preuMin));
-            }
-
-            if (src_maxMin != "" && item.get("maxMinuts").toString().toLowerCase().includes(src_maxMin.toLowerCase())) {
-                itemCerca.push(item);
-            } else if (src_maxMin != "" && itemCerca.indexOf(src_maxMin) != -1){
-                itemCerca.splice(0, itemCerca.indexOf(src_maxMin));
-            }
-
-        });
         if (src_id == "" && src_nom == "" && src_maxMin == "" && src_preuMin == "") {
             this.carregarTaula();
         } else {
