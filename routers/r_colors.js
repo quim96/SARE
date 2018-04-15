@@ -5,7 +5,7 @@ module.exports = function(app) {
     var Colors = require('../controllers/c_colors')(app)
     var util = require('../util')
 
-    // Mounted on /api/orders
+    
     var router = express.Router();
 
     router.get('/:id', util.isAuthenticated, Colors.getById);

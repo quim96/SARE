@@ -31,6 +31,7 @@ var ColorListView = Backbone.View.extend({
         return this;
     },
     carregarTaula: function() {
+        this.$el.find('.trCont').remove();
         var localEventBus = this.localEventBus;
         $table = this.$el.find('#taula');
 
@@ -89,7 +90,7 @@ var ColorListView = Backbone.View.extend({
             var model = this;
             color.save(data, {
                 success: function(color) {
-                    model.test(color);
+                    model.add(color);
                 }
             });
         } else {
@@ -101,7 +102,7 @@ var ColorListView = Backbone.View.extend({
         }
 
     },
-    test: function(item) {
+    add: function(item) {
         this.collection.add(item);
         this.render();
     },

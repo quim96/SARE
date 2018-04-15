@@ -37,6 +37,8 @@ var Header = Backbone.View.extend({
             this.$el.find('#nav_home').addClass('active');
         } else if (item == "color") {
             this.$el.find('#nav_color').addClass('active');
+        } else if (item == "area") {
+            this.$el.find('#nav_area').addClass('active');
         }
     },
     logout: function() {
