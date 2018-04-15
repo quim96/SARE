@@ -12,13 +12,9 @@ module.exports = function(sequelize, DataTypes) {
     }, {
         classMethods : {
             associate : function(models) {
-                User.hasMany(models.Order)
-            },
-            associate : function(models) {
+                User.belongsTo(models.Rol);
+                User.hasMany(models.Order);
                 User.hasMany(models.Vehicle)
-            },
-            associate : function(models) {
-                User.hasMany(models.Rol)
             }
         }
     });

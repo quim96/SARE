@@ -14,9 +14,7 @@ module.exports = function(sequelize, DataTypes) {
     }, {
         classMethods : {
             associate : function(models) {
-                Tiquet.belongsTo(models.Matricula)
-            },
-            associate : function(models) {
+                Tiquet.belongsTo(models.Matricula);
                 Tiquet.belongsTo(models.Zona)
             }
         }

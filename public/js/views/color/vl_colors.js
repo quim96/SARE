@@ -6,7 +6,6 @@ var ColorListView = Backbone.View.extend({
     initialize: function(params) {
         this.eventBus = params.eventBus;
         this.template = _.template(tl_color);
-
         this.lastDetail = null;
 
         this.localEventBus = _.extend({}, Backbone.Events);
@@ -19,26 +18,53 @@ var ColorListView = Backbone.View.extend({
         'click .crear' : 'showCreate',
         'click .tornar' : 'showContent',
         'click .enviar' : 'save',
+        'keyup .cercar' : 'cercar',
         'click #btnEsborrar' : 'delete'
     },
-    render: function () {
+    render: function() {
         this.eventBus.trigger('tab:change', 'color');
         this.$el.html(this.template({colors: this.collection}));
-        console.log(this.$el.find('#nav_color'));
+
         this.showContent();
+        this.collection;
+        this.carregarTaula();
+        return this;
+    },
+    carregarTaula: function() {
         var localEventBus = this.localEventBus;
         $table = this.$el.find('#taula');
+
         this.collection.each(function(item) {
             $table.append(new ColorItemView({model: item, eventBus: localEventBus}).render().el);
         });
-        return this;
     },
-
-    edit: function(element) {
-        console.log($(element.currentTarget).closest('tr').attr('id'));
-        aux = $(element.currentTarget);
+    cercar: function() {
+        var localEventBus = this.localEventBus;
+        var src_id = this.$el.find('#txt_id').val();
+        var src_nom = this.$el.find('#txt_nom').val();
+        itemCerca = [];
+        tt = this.collection;
+        this.collection.each(function(item) {
+            if (src_id != "" && src_nom == "" && item.get("id").toString().toLowerCase().includes(src_id.toLowerCase())) {
+                itemCerca.push(item);
+            }
+            if (src_nom != "" && src_id == "" && item.get("nom").toString().toLowerCase().includes(src_nom.toLowerCase())) {
+                itemCerca.push(item);
+            }
+            if (src_nom != "" && src_id != "" && item.get("id").toString().toLowerCase().includes(src_id.toLowerCase()) && item.get("nom").toString().toLowerCase().includes(src_nom.toLowerCase())) {
+                itemCerca.push(item);
+            }
+        });
+        if (src_id == "" && src_nom == "") {
+            this.carregarTaula();
+        } else {
+            this.$el.find('.trCont').remove();
+            $table = this.$el.find('#taula');
+            itemCerca.forEach(function (item) {
+                $table.append(new ColorItemView({model: item, eventBus: localEventBus}).render().el);
+            });
+        }
     },
-
     showCreate: function() {
         this.$el.find('.titolPag').text("Crear Color");
         this.$el.find('#nom').val('');

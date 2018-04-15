@@ -10,15 +10,10 @@ module.exports = function(sequelize, DataTypes) {
 	}, {
 		classMethods : {
             associate : function(models) {
-                Vehicle.belongsTo(models.Color)
-            },
-            associate : function(models) {
-                Vehicle.belongsTo(models.Matricula)
-            },
-            associate : function(models) {
+                Vehicle.belongsTo(models.Color);
+                Vehicle.belongsTo(models.Matricula);
                 Vehicle.belongsTo(models.User)
             }
-
 		}
 	});
 

@@ -65,9 +65,10 @@ app.db.init(app.get('env'))
     .then(function() {return app.db.Color.create({nom: 'Gris'})})
     .then(function() {return app.db.Color.create({nom: 'Blanc'})})
     .then(function() {return app.db.Color.create({nom: 'Negre'})})
+    .then(function() {return app.db.Rol.create({nom: 'Admin'})})
     //Fi Inserir Colors
     .then(function() {
-        return app.db.User.create({username: 'jo', password: bcrypt.hashSync('jo'), email: 'jo@jo.com'})
+        return app.db.User.create({username: 'jo', password: bcrypt.hashSync('jo'), email: 'jo@jo.com', RolId: 1})
     })
     .then(function(user) {
         return app.db.Order.create({description: 'My first order'})

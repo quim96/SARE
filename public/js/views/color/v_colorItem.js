@@ -6,6 +6,7 @@ var ColorItemView = Backbone.View.extend({
         this.template = _.template(t_colorItem);
     },
     tagName: 'tr',
+    className: 'trCont',
     events: {
         'click .fa-edit': 'detail',
         'click .fa-ban': 'delete'
