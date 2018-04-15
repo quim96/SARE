@@ -9,6 +9,7 @@ module.exports = function (app) {
     dao.Order = require('./d_order')(app, dao);
     dao.Color = require('./d_color')(app, dao);
     dao.Marca = require('./d_marca')(app, dao);
+    dao.Area = require('./d_area')(app, dao);
     dao.Matricula = require('./d_matricula')(app, dao);
     dao.Rol = require('./d_rol')(app, dao);
     dao.Sancio = require('./d_sancio')(app, dao);

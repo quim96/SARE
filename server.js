@@ -87,6 +87,7 @@ app.db.init(app.get('env'))
         app.use('/api/users', require('./routers/r_users')(app));
         app.use('/api/orders', require('./routers/r_orders')(app));
         app.use('/api/colors', require('./routers/r_colors')(app));
+        app.use('/api/arees', require('./routers/r_arees')(app));
 
         app.use(function (err, req, res, next) {
             var code = err.code || 500;

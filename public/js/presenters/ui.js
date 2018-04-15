@@ -2,16 +2,19 @@ var EventBus = require('../eventBus')
 var localStorage = require('../localStorage')
 var CollectionOrder = require("../collections/c_orders")
 var CollectionColor = require("../collections/c_colors")
+var CollectionArea = require("../collections/c_arees")
 var UserLogin = require("../views/user/v_login")
 var UserSignup = require("../views/user/v_signup")
 var HeaderView = require("../views/header")
 var OrdersView = require("../views/order/vl_orders")
 var ColorView = require("../views/color/vl_colors")
+var AreaView = require("../views/area/vl_area")
 
 var Ui = {}
 
 var orderList = new CollectionOrder({eventBus: EventBus})
 var colorList = new CollectionColor ({eventBus: EventBus})
+var areaList = new CollectionArea ({eventBus: EventBus})
 
 var $content = $('#content')
 
@@ -58,6 +61,19 @@ Ui.switchContent = function (widget) {
                 Ui.switchContent('login');
             break;
         }
+        case 'arees': {
+            console.log("hello");
+            if (localStorage.hasItem('user')) {
+                areaList.fetch({
+                    success: function () {
+                        lastContent = new AreaView({el: $content, eventBus: EventBus, collection: areaList}).render();
+                    },
+                    error: Ui.error
+                });
+            } else
+                Ui.switchContent('login');
+            break;
+        }
     }
 }
 
@@ -95,6 +111,7 @@ EventBus.on('ui:showError', Ui.error);
 EventBus.on('ui:switch:signup', Ui.showSignup);
 EventBus.on('ui:switch:orders', Ui.switchContent.bind(null, 'orders'));
 EventBus.on('ui:switch:colors', Ui.switchContent.bind(null, 'colors'));
+EventBus.on('ui:switch:arees', Ui.switchContent.bind(null, 'arees'));
 
 module.exports = Ui;
 

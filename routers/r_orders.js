@@ -5,7 +5,7 @@ module.exports = function(app) {
   var Orders = require('../controllers/c_orders')(app)
   var util = require('../util')
 
-  // Mounted on /api/orders
+
   var router = express.Router()
 
   router.get('/:id', util.isAuthenticated, Orders.getById)

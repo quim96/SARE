@@ -12,6 +12,7 @@ Router.init = function () {
             'login': 'home',
             'orders': 'showOrders',
             'colors': 'showColors',
+            'arees': 'showArees',
 
             // Default
             '*actions': 'defaultAction'
@@ -31,6 +32,10 @@ Router.init = function () {
 
         showColors: function () {
             EventBus.trigger('ui:switch:colors')
+        },
+
+        showArees: function () {
+            EventBus.trigger('ui:switch:arees')
         }
     })
 
