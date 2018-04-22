@@ -6,7 +6,6 @@ var AreaListView = Backbone.View.extend({
     initialize: function(params) {
         this.eventBus = params.eventBus;
         this.template = _.template(tl_area);
-        this.lastDetail = null;
 
         this.localEventBus = _.extend({}, Backbone.Events);
 
@@ -26,7 +25,6 @@ var AreaListView = Backbone.View.extend({
         this.$el.html(this.template({areas: this.collection}));
 
         this.showContent();
-        this.collection;
         this.carregarTaula();
         return this;
     },

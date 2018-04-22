@@ -7,29 +7,19 @@ var TiquetListView = Backbone.View.extend({
     initialize: function(params) {
         this.eventBus = params.eventBus;
         this.template = _.template(tl_tiquet);
-        this.lastDetail = null;
 
         this.localEventBus = _.extend({}, Backbone.Events);
-
-        this.localEventBus.on('view:tiquet:edit', this.showEdit.bind(this));
-        this.localEventBus.on('view:tiquet:delete', this.showDelete.bind(this));
-    },
+        },
 
     events: {
-        'click .crear' : 'showCreate',
-        'click .tornar' : 'showContent',
-        'click .enviar' : 'save',
         'keyup .cercar' : 'cercar',
-        'click #btnEsborrar' : 'delete'
     },
     render: function() {
         this.eventBus.trigger('tab:change', 'tiquet');
         this.$el.html(this.template({tiquets: this.collection}));
 
-        this.showContent();
-        this.collection;
+        this.$el.find('.titolPag').text("Tiquets");
         this.collection.each(function(item) {
-            test = item;
             var data = item.get("dataInici").split('T');
             var dataCurta = data[0].split('-');
             item.set("dataInici", dataCurta[2] + '/' + dataCurta[1] + '/' + dataCurta[0] + ' ' + data[1].split('.')[0]);
@@ -72,7 +62,6 @@ var TiquetListView = Backbone.View.extend({
         if (src_dataIn !== "" ) {
             itemCerca = [];
             aux.forEach(function (item) {
-                test = item.get("dataInici").toString().toLowerCase();
                 if (src_dataIn !== "" && item.get("dataInici").toString().toLowerCase().includes(src_dataIn.toLowerCase())) {
                     itemCerca.push(item);
                 }
@@ -139,73 +128,6 @@ var TiquetListView = Backbone.View.extend({
             });
         }
     },
-    showCreate: function() {
-        this.$el.find('.titolPag').text("Crear Tiquet");
-        this.$el.find('#nom').val('');
-        this.showCreEdi();
-    },
-    showCreEdi(){
-        this.$el.find('.contingut').hide();
-        this.$el.find('.crearEditar').show();
-    },
-    showContent: function() {
-        tiquetEdit = null;
-        this.$el.find('.titolPag').text("Tiquets");
-        this.$el.find('.crearEditar').hide();
-        this.$el.find('.contingut').show();
-    },
-    save: function() {
-        if (tiquetEdit == null) {
-            var data = {
-                nom: this.$el.find('#nom').val()
-            };
-            var tiquet = new Tiquet();
-            var model = this;
-            tiquet.save(data, {
-                success: function(tiquet) {
-                    model.add(tiquet);
-                }
-            });
-        } else {
-            tiquetEdit.set('nom', this.$el.find('#nom').val());
-            var model = this;
-            tiquetEdit.save().then(function (tiquet) {
-                model.render();
-            });
-        }
-
-    },
-    add: function(item) {
-        this.collection.add(item);
-        this.render();
-    },
-    showEdit: function(id) {
-        tiquetEdit =  this.collection.get(id);
-        this.$el.find('.titolPag').text("Editar tiquet " + tiquetEdit.get("id"));
-        this.showCreEdi();
-        this.$el.find('#nom').val(tiquetEdit.get('nom'));
-    },
-    showDelete: function(id) {
-        tiquetEdit =  this.collection.get(id);
-        this.$el.find('#esborrarCol').text(tiquetEdit.get('nom'));
-        this.$el.find('#popup').modal();
-    },
-    delete: function () {
-        var model = this;
-        tiquetEdit.destroy({
-            success: function(removed, data) {
-                model.$el.find('#popup').modal('hide');
-                model.render();
-            },
-            error: function(aborted, response) {
-                model.$el.find('#popup').modal('hide');
-                this.render();
-            }
-        });
-    }
-
-
-
 
 });
 
