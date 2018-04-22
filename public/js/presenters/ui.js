@@ -1,25 +1,28 @@
-var EventBus = require('../eventBus')
-var localStorage = require('../localStorage')
-var CollectionOrder = require("../collections/c_orders")
-var CollectionColor = require("../collections/c_colors")
-var CollectionArea = require("../collections/c_arees")
-var UserLogin = require("../views/user/v_login")
-var UserSignup = require("../views/user/v_signup")
-var HeaderView = require("../views/header")
-var OrdersView = require("../views/order/vl_orders")
-var ColorView = require("../views/color/vl_colors")
-var AreaView = require("../views/area/vl_area")
+var EventBus = require('../eventBus');
+var localStorage = require('../localStorage');
+var CollectionOrder = require("../collections/c_orders");
+var CollectionColor = require("../collections/c_colors");
+var CollectionArea = require("../collections/c_arees");
+var CollectionTiquet = require("../collections/c_tiquets");
+var UserLogin = require("../views/user/v_login");
+var UserSignup = require("../views/user/v_signup");
+var HeaderView = require("../views/header");
+var OrdersView = require("../views/order/vl_orders");
+var ColorView = require("../views/color/vl_colors");
+var AreaView = require("../views/area/vl_area");
+var TiquetView = require("../views/tiquet/vl_tiquets");
 
-var Ui = {}
+var Ui = {};
 
-var orderList = new CollectionOrder({eventBus: EventBus})
-var colorList = new CollectionColor ({eventBus: EventBus})
-var areaList = new CollectionArea ({eventBus: EventBus})
+var orderList = new CollectionOrder({eventBus: EventBus});
+var colorList = new CollectionColor ({eventBus: EventBus});
+var areaList = new CollectionArea ({eventBus: EventBus});
+var tiquetList = new CollectionTiquet ({eventBus: EventBus});
 
-var $content = $('#content')
+var $content = $('#content');
 
-var lastHeader = null
-var lastContent = null
+var lastHeader = null;
+var lastContent = null;
 
 Ui.switchContent = function (widget) {
     if (lastContent) lastContent.undelegateEvents()
@@ -62,11 +65,41 @@ Ui.switchContent = function (widget) {
             break;
         }
         case 'arees': {
-            console.log("hello");
             if (localStorage.hasItem('user')) {
                 areaList.fetch({
                     success: function () {
                         lastContent = new AreaView({el: $content, eventBus: EventBus, collection: areaList}).render();
+                    },
+                    error: Ui.error
+                });
+            } else
+                Ui.switchContent('login');
+            break;
+        }
+        case 'tiquetsDia': {
+            if (localStorage.hasItem('user')) {
+
+                tiquetList.fetch({
+                    data: {data: new Date()},
+                    processData: true,
+                    success: function () {
+                        console.log(tiquetList);
+                        lastContent = new TiquetView({el: $content, eventBus: EventBus, collection: tiquetList}).render();
+                    },
+                    error: Ui.error
+                });
+            } else
+                Ui.switchContent('login');
+            break;
+        }
+        case 'tiquetsAct': {
+            if (localStorage.hasItem('user')) {
+                tiquetList.fetch({
+                    data: {dataFi: new Date()},
+                    processData: true,
+                    success: function () {
+                        console.log(tiquetList);
+                        lastContent = new TiquetView({el: $content, eventBus: EventBus, collection: tiquetList}).render();
                     },
                     error: Ui.error
                 });
@@ -95,8 +128,13 @@ Ui.showSignup = function () {
 };
 
 // This always receive a JSON object with a standard API error
-Ui.error = function (err) {
-    if (err.message)
+Ui.error = function (err, response) {
+    aux2 = response;
+    console.log(err.message);
+    if (aux2.status === 400){
+        Ui.switchContent('login');
+    }
+    else if (err.message)
         alert("Error: " + err.message);
     else if (err.responseJSON) {
         if (err.responseJSON.message)
@@ -112,6 +150,8 @@ EventBus.on('ui:switch:signup', Ui.showSignup);
 EventBus.on('ui:switch:orders', Ui.switchContent.bind(null, 'orders'));
 EventBus.on('ui:switch:colors', Ui.switchContent.bind(null, 'colors'));
 EventBus.on('ui:switch:arees', Ui.switchContent.bind(null, 'arees'));
+EventBus.on('ui:switch:tiquetsDia', Ui.switchContent.bind(null, 'tiquetsDia'));
+EventBus.on('ui:switch:tiquetsAct', Ui.switchContent.bind(null, 'tiquetsAct'));
 
 module.exports = Ui;
 

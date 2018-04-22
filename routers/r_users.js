@@ -20,7 +20,5 @@ module.exports = function (app) {
     // Get all ordeers belonging to the signed in user
     router.get('/self/orders', util.isAuthenticated, Orders.getOrders);
 
-    router.get('/self/rols', util.isAuthenticated, Users.getRols);
-
     return router;
 }

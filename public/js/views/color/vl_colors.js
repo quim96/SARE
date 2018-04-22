@@ -44,17 +44,18 @@ var ColorListView = Backbone.View.extend({
         var src_id = this.$el.find('#txt_id').val();
         var src_nom = this.$el.find('#txt_nom').val();
 
-        var itemCerca = this.collection;
-        aux = itemCerca;
+        var itemCerca = [];
+        var aux = this.collection;
         if (src_id != "" ) {
+            itemCerca = [];
             aux.forEach(function (item) {
                 if (src_id != "" && item.get("id").toString().toLowerCase().includes(src_id.toLowerCase())) {
                     itemCerca.push(item);
                 }
             });
+            aux = itemCerca;
         }
         if (src_nom != "" ) {
-            aux = itemCerca;
             itemCerca = [];
             aux.forEach(function (item) {
                 if (src_nom != "" && item.get("nom").toString().toLowerCase().includes(src_nom.toLowerCase())) {
@@ -115,6 +116,7 @@ var ColorListView = Backbone.View.extend({
     },
     showEdit: function(id) {
         colorEdit =  this.collection.get(id);
+        this.$el.find('.titolPag').text("Editar color " + colorEdit.get("id"));
         this.showCreEdi();
         this.$el.find('#nom').val(colorEdit.get('nom'));
     },

@@ -14,7 +14,7 @@ module.exports = function(sequelize, DataTypes) {
             associate : function(models) {
                 User.belongsTo(models.Rol);
                 User.hasMany(models.Order);
-                User.hasMany(models.Vehicle)
+                User.hasMany(models.Vehicle);
             }
         }
     });

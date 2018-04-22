@@ -4,7 +4,7 @@
 
 module.exports = function(sequelize, DataTypes) {
     var Tiquet = sequelize.define('Tiquet', {
-        import : DataTypes.INTEGER,
+        import : DataTypes.FLOAT,
         dataInici : {
             type: DataTypes.DATE
         },
@@ -14,8 +14,8 @@ module.exports = function(sequelize, DataTypes) {
     }, {
         classMethods : {
             associate : function(models) {
-                Tiquet.belongsTo(models.Matricula);
-                Tiquet.belongsTo(models.Zona)
+                Tiquet.belongsTo(models.Vehicle);
+                Tiquet.belongsTo(models.Area)
             }
         }
     });

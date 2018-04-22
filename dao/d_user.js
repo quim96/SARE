@@ -25,22 +25,16 @@ module.exports = function (app, dao) {
             });
     };
 
+
     User.getByUsername = function (username, t) {
         return db.User.find(util.addTrans(t, {where: {username: username}}));
     };
+
 
     User.getById = function (id, t) {
         return db.User.find(util.addTrans(t, {where: {id: id}}));
     };
 
-    User.getAdmin = function (userId, options, t) {
-        var opt = options || {};
-        return dao.User.getById(userId, t)
-            .then(function(user) {
-                if (!user) util.throwError(400, util.Error.ERR_ENTITY_NOT_FOUND, 'There is no User with id: ' + userId);
-                return user.getRol(util.addTrans(t, opt));
-            })
-    };
 
     User.getByEmail = function (email, t) {
         return db.User.find(util.addTrans(t, {where: {email: email}}));
