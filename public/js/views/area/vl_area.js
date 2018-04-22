@@ -138,19 +138,15 @@ var AreaListView = Backbone.View.extend({
         this.render();
     },
     showEdit: function(id) {
-        areaEdit =  this.collection.get(id);
+        var areaEdit =  this.collection.get(id);
         this.$el.find('.titolPag').text("Editar àrea " + areaEdit.get("id"));
         this.showCreEdi();
-        console.log(areaEdit);
-        ttt = areaEdit;
-        console.log(areaEdit.get('preuMinut'));
         this.$el.find('#nom').val(areaEdit.get('nom'));
         this.$el.find('#preuMinut').val(areaEdit.get('preuMinut'));
         this.$el.find('#maxMinuts').val(areaEdit.get('maxMinuts'));
     },
     showDelete: function(id) {
-        areaEdit =  this.collection.get(id);
-        console.log(areaEdit);
+        var areaEdit =  this.collection.get(id);
         this.$el.find('#esborrarCol').text(areaEdit.get('nom'));
         this.$el.find('#popup').modal();
     },

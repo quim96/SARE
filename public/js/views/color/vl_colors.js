@@ -122,7 +122,6 @@ var ColorListView = Backbone.View.extend({
     },
     showDelete: function(id) {
         colorEdit =  this.collection.get(id);
-        console.log(colorEdit);
         this.$el.find('#esborrarCol').text(colorEdit.get('nom'));
         this.$el.find('#popup').modal();
     },

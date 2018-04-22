@@ -187,7 +187,6 @@ var TiquetListView = Backbone.View.extend({
     },
     showDelete: function(id) {
         tiquetEdit =  this.collection.get(id);
-        console.log(tiquetEdit);
         this.$el.find('#esborrarCol').text(tiquetEdit.get('nom'));
         this.$el.find('#popup').modal();
     },

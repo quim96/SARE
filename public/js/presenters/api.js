@@ -52,7 +52,7 @@ Api.init = function () {
 
   EventBus.on('api:login:successful', function (user) {
     localStorage.setItem('user', user);
-    EventBus.trigger('ui:showHome')
+    EventBus.trigger('ui:showLast')
   })
 
   EventBus.on('api:login:error', EventBus.trigger.bind(EventBus, 'ui:showError'))

@@ -17,6 +17,10 @@ var Header = Backbone.View.extend({
             view.setUserData(user);
             view.render();
         })
+        params.eventBus.on('localstorage:remove:user', function () {
+            view.setUserData(false);
+            view.render();
+        })
     },
 
     events: {
@@ -24,7 +28,7 @@ var Header = Backbone.View.extend({
     },
 
     render: function () {
-        this.$el.html(this.template({user: userData}))
+        this.$el.html(this.template({user: userData}));
         return this
     },
 
@@ -32,7 +36,7 @@ var Header = Backbone.View.extend({
         userData = user
     },
     activar: function (item) {
-        this.$el.find('.tab').removeClass('active');
+        this.$el.find('.active').removeClass('active');
         if (item == "home") {
             this.$el.find('#nav_home').addClass('active');
         } else if (item == "color") {

@@ -27,8 +27,6 @@ var lastContent = null;
 Ui.switchContent = function (widget) {
     if (lastContent) lastContent.undelegateEvents()
 
-    lastHeader = new HeaderView({el: '#header', eventBus: EventBus, user: localStorage.getItem('user')}).render()
-
     var args = Array.prototype.slice.call(arguments)
     args.shift()
     switch (widget) {
@@ -41,6 +39,7 @@ Ui.switchContent = function (widget) {
             break
         }
         case 'orders': {
+            localStorage.setItem('last', 'orders');
             if (localStorage.hasItem('user')) {
                 orderList.fetch({
                     success: function () {
@@ -53,6 +52,7 @@ Ui.switchContent = function (widget) {
             break;
         }
         case 'colors': {
+            localStorage.setItem('last', 'colors');
             if (localStorage.hasItem('user')) {
                 colorList.fetch({
                     success: function () {
@@ -65,6 +65,7 @@ Ui.switchContent = function (widget) {
             break;
         }
         case 'arees': {
+            localStorage.setItem('last', 'arees');
             if (localStorage.hasItem('user')) {
                 areaList.fetch({
                     success: function () {
@@ -77,13 +78,12 @@ Ui.switchContent = function (widget) {
             break;
         }
         case 'tiquetsDia': {
+            localStorage.setItem('last', 'tiquetsDia');
             if (localStorage.hasItem('user')) {
-
                 tiquetList.fetch({
                     data: {data: new Date()},
                     processData: true,
                     success: function () {
-                        console.log(tiquetList);
                         lastContent = new TiquetView({el: $content, eventBus: EventBus, collection: tiquetList}).render();
                     },
                     error: Ui.error
@@ -93,12 +93,12 @@ Ui.switchContent = function (widget) {
             break;
         }
         case 'tiquetsAct': {
+            localStorage.setItem('last', 'tiquetsAct');
             if (localStorage.hasItem('user')) {
                 tiquetList.fetch({
                     data: {dataFi: new Date()},
                     processData: true,
                     success: function () {
-                        console.log(tiquetList);
                         lastContent = new TiquetView({el: $content, eventBus: EventBus, collection: tiquetList}).render();
                     },
                     error: Ui.error
@@ -111,8 +111,7 @@ Ui.switchContent = function (widget) {
 }
 
 Ui.init = function () {
-    // headerView.setUserData(localStorage.getItem('user'))
-    // Ui.showHome();
+    lastHeader = new HeaderView({el: '#header', eventBus: localStorage, user: localStorage.getItem('user')}).render()
 };
 
 Ui.showHome = function () {
@@ -123,15 +122,24 @@ Ui.showHome = function () {
     }
 };
 
+Ui.showLast = function () {
+    if (localStorage.hasItem('last')) {
+        Ui.switchContent(localStorage.getItem('last'))
+    } else {
+        Ui.switchContent('tiquetsAct')
+    }
+
+};
+
 Ui.showSignup = function () {
     Ui.switchContent('signup');
 };
 
 // This always receive a JSON object with a standard API error
 Ui.error = function (err, response) {
-    aux2 = response;
-    console.log(err.message);
-    if (aux2.status === 400){
+    if (response.status === 400){
+        if(localStorage.hasItem('user'))
+            localStorage.removeItem('user');
         Ui.switchContent('login');
     }
     else if (err.message)
@@ -143,7 +151,7 @@ Ui.error = function (err, response) {
             alert("Error: " + err.responseJSON.error.message);
     }
 };
-
+EventBus.on('ui:showLast', Ui.showLast);
 EventBus.on('ui:showHome', Ui.showHome);
 EventBus.on('ui:showError', Ui.error);
 EventBus.on('ui:switch:signup', Ui.showSignup);

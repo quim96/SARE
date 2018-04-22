@@ -24,6 +24,6 @@ var UserLogin = Backbone.View.extend({
     return this
   }
 
-})
+});
 
-module.exports = UserLogin
+module.exports = UserLogin;
