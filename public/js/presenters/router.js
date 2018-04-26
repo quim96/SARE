@@ -15,6 +15,7 @@ Router.init = function () {
             'arees': 'showArees',
             'tiquetsDia': 'showTiquetsDia',
             'tiquetsAct': 'showTiquetsAct',
+            'estacionament': 'showEstacionament',
 
             // Default
             '*actions': 'defaultAction'
@@ -46,6 +47,9 @@ Router.init = function () {
         showTiquetsAct: function () {
             EventBus.trigger('ui:switch:tiquetsAct')
         },
+        showEstacionament: function () {
+            EventBus.trigger('ui:switch:estacionament')
+        }
 
     });
 

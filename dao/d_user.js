@@ -35,7 +35,6 @@ module.exports = function (app, dao) {
         return db.User.find(util.addTrans(t, {where: {id: id}}));
     };
 
-
     User.getByEmail = function (email, t) {
         return db.User.find(util.addTrans(t, {where: {email: email}}));
     };

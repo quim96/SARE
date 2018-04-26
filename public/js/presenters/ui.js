@@ -4,6 +4,8 @@ var CollectionOrder = require("../collections/c_orders");
 var CollectionColor = require("../collections/c_colors");
 var CollectionArea = require("../collections/c_arees");
 var CollectionTiquet = require("../collections/c_tiquets");
+var CollectionVehicle = require("../collections/c_vehicles");
+var CollectionMarca = require("../collections/c_marcas");
 var UserLogin = require("../views/user/v_login");
 var UserSignup = require("../views/user/v_signup");
 var HeaderView = require("../views/header");
@@ -11,13 +13,16 @@ var OrdersView = require("../views/order/vl_orders");
 var ColorView = require("../views/color/vl_colors");
 var AreaView = require("../views/area/vl_area");
 var TiquetView = require("../views/tiquet/vl_tiquets");
+var EstacionamentView = require("../views/estacionament/vl_estacionament");
 
 var Ui = {};
 
 var orderList = new CollectionOrder({eventBus: EventBus});
 var colorList = new CollectionColor ({eventBus: EventBus});
+var marcaList = new CollectionMarca ({eventBus: EventBus});
 var areaList = new CollectionArea ({eventBus: EventBus});
 var tiquetList = new CollectionTiquet ({eventBus: EventBus});
+var vehicleList = new CollectionVehicle ({eventBus: EventBus});
 
 var $content = $('#content');
 
@@ -84,7 +89,7 @@ Ui.switchContent = function (widget) {
                     data: {data: new Date()},
                     processData: true,
                     success: function () {
-                        lastContent = new TiquetView({el: $content, eventBus: EventBus, collection: tiquetList}).render();
+                        lastContent = new TiquetView({titol: 'Tiquets Dia Actual', el: $content, eventBus: EventBus, collection: tiquetList}).render();
                     },
                     error: Ui.error
                 });
@@ -99,7 +104,30 @@ Ui.switchContent = function (widget) {
                     data: {dataFi: new Date()},
                     processData: true,
                     success: function () {
-                        lastContent = new TiquetView({el: $content, eventBus: EventBus, collection: tiquetList}).render();
+                        lastContent = new TiquetView({titol: 'Tiquets Actius', el: $content, eventBus: EventBus, collection: tiquetList}).render();
+                    },
+                    error: Ui.error
+                });
+            } else
+                Ui.switchContent('login');
+            break;
+        }
+        case 'estacionament': {
+            localStorage.setItem('last', 'estacionament');
+            if (localStorage.hasItem('user')) {
+                vehicleList.fetch({
+                    success: function () {
+                        marcaList.fetch({
+                            success: function () {
+                                lastContent = new EstacionamentView({
+                                    el: $content, eventBus: EventBus, collection: {
+                                        vehicles: vehicleList,
+                                        colors: colorList,
+                                        marcas: marcaList
+                                    }
+                                }).render();
+                            },
+                            error: Ui.error});
                     },
                     error: Ui.error
                 });
@@ -111,7 +139,7 @@ Ui.switchContent = function (widget) {
 }
 
 Ui.init = function () {
-    lastHeader = new HeaderView({el: '#header', eventBus: localStorage, user: localStorage.getItem('user')}).render()
+    lastHeader = new HeaderView({el: '#header', eventBus: localStorage, eventBusGlob: EventBus, user: localStorage.getItem('user')}).render()
 };
 
 Ui.showHome = function () {
@@ -160,6 +188,8 @@ EventBus.on('ui:switch:colors', Ui.switchContent.bind(null, 'colors'));
 EventBus.on('ui:switch:arees', Ui.switchContent.bind(null, 'arees'));
 EventBus.on('ui:switch:tiquetsDia', Ui.switchContent.bind(null, 'tiquetsDia'));
 EventBus.on('ui:switch:tiquetsAct', Ui.switchContent.bind(null, 'tiquetsAct'));
+EventBus.on('ui:switch:estacionament', Ui.switchContent.bind(null, 'estacionament'));
+
 
 module.exports = Ui;
 

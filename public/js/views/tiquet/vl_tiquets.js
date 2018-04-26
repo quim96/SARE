@@ -1,11 +1,10 @@
 var tl_tiquet = require("raw-loader!../../../templates/tiquet/tl_tiquet.html");
-var Tiquet = require('../../models/m_tiquet')
 var TiquetItemView = require('./v_tiquetItem');
 var Common = require('../../common');
-var tiquetEdit;
 var TiquetListView = Backbone.View.extend({
     initialize: function(params) {
         this.eventBus = params.eventBus;
+        this.titol = params.titol;
         this.template = _.template(tl_tiquet);
 
         this.localEventBus = _.extend({}, Backbone.Events);
@@ -15,10 +14,10 @@ var TiquetListView = Backbone.View.extend({
         'keyup .cercar' : 'cercar',
     },
     render: function() {
-        this.eventBus.trigger('tab:change', 'tiquet');
+        this.eventBus.trigger('tab:change', 'tiquets');
         this.$el.html(this.template({tiquets: this.collection}));
 
-        this.$el.find('.titolPag').text("Tiquets");
+        this.$el.find('.titolPag').text(this.titol);
         this.collection.each(function(item) {
             var data = item.get("dataInici").split('T');
             var dataCurta = data[0].split('-');

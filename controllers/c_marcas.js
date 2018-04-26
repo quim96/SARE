@@ -14,7 +14,7 @@ module.exports = function (app) {
                 return dao.User.getById(req.session.userId, t)
                     .then(function (user) {
                         if (!user) util.sendError(400, util.Error.ERR_ENTITY_NOT_FOUND, "User from session does not exist");
-                        else return dao.Tiquet.create(req.body, user, t);
+                        else return dao.Marca.create(req.body, user, t);
                     })
             })
                 .then(util.jsonResponse.bind(util, res))
@@ -22,6 +22,7 @@ module.exports = function (app) {
                 .done();
         },
         edit: function (req, res) {
+            util.checkParams(req.body, ['nom']);
             util.checkParams(req.body, ['id']);
 
             db.sequelize.transaction(function (t) {
@@ -29,7 +30,7 @@ module.exports = function (app) {
                     .then(function (user) {
                         if (!user) util.sendError(400, util.Error.ERR_ENTITY_NOT_FOUND, "User from session does not exist");
                         else {
-                            return dao.Tiquet.update(req.body, user, t).then(function() {
+                            return dao.Marca.update(req.body, user, t).then(function(item) {
                                 return req.body;
                             })
                         }
@@ -42,47 +43,33 @@ module.exports = function (app) {
         esborrar: function (req, res) {
             util.checkParams(req.params, ['id']);
 
-            dao.Tiquet.delete(req.params.id)
+            dao.Marca.delete(req.params.id)
                 .then(util.jsonResponse.bind(util, res))
                 .catch(util.sendError.bind(util, res, 400, util.Error.ERR_BAD_REQUEST))
                 .done();
         },
         getAll: function (req, res) {
-            if(util.containsParam(req.query, ['data'])){
-                dao.Tiquet.getByData(req.query.data)
-                    .then(util.jsonResponse.bind(util, res))
-                    .catch(util.sendError.bind(util, res, 400, util.Error.ERR_BAD_REQUEST))
-                    .done();
-            } else if(util.containsParam(req.query, ['dataInici', 'dataFi'])){
-                dao.Tiquet.getByDataIniFi(req.query.dataInici, req.query.dataFi)
-                    .then(util.jsonResponse.bind(util, res))
-                    .catch(util.sendError.bind(util, res, 400, util.Error.ERR_BAD_REQUEST))
-                    .done();
-            } else if(util.containsParam(req.query, ['dataFi'])){
-                dao.Tiquet.getByDataFi(req.query.dataFi)
-                    .then(util.jsonResponse.bind(util, res))
-                    .catch(util.sendError.bind(util, res, 400, util.Error.ERR_BAD_REQUEST))
-                    .done();
-            } else {
-                dao.Tiquet.getAllTiquets()
-                    .then(util.jsonResponse.bind(util, res))
-                    .catch(util.sendError.bind(util, res, 400, util.Error.ERR_BAD_REQUEST))
-                    .done();
-            }
+            dao.Marca.getAllMarcas()
+                .then(util.jsonResponse.bind(util, res))
+                .catch(util.sendError.bind(util, res, 400, util.Error.ERR_BAD_REQUEST))
+                .done();
         },
         getById: function (req, res) {
             util.checkParams(req.params, ['id']);
-                dao.Tiquet.getById(req.params.id)
-                    .then(util.jsonResponse.bind(util, res))
-                    .catch(util.sendError.bind(util, res, 400, util.Error.ERR_BAD_REQUEST))
-                    .done();
-            },
-        getByData: function (req, res) {
-            dao.Tiquet.getByData(req.params.data)
+
+            dao.Marca.getById(req.params.id)
+                .then(util.jsonResponse.bind(util, res))
+                .catch(util.sendError.bind(util, res, 400, util.Error.ERR_BAD_REQUEST))
+                .done();
+        },
+
+        getVehicles: function (req, res) {
+            dao.Marca.getUserVehicles(req.session.userId, {})
                 .then(util.jsonResponse.bind(util, res))
                 .catch(util.sendError.bind(util, res, 400, util.Error.ERR_BAD_REQUEST))
                 .done();
         }
+
 
     }
 };

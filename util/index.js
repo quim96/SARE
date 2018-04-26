@@ -1,5 +1,7 @@
 var util = {}
 
+util.llistaAct = [];
+
 util.jsonResponse = function (res, obj) {
     res.status(200).json(obj || {message: 'ok'});
 };
@@ -67,19 +69,25 @@ util.isAuthenticated = function(req, res, next) {
 };
 
 util.isAdmin = function(req, res, next) {
-    if (req.session.rol == 1) next()
+    if (util.llistaAct.indexOf(req.session.userId) !== -1){ //Permet veure si l'usuari té alguna actualització pendent
+        util.llistaAct.splice(util.llistaAct.indexOf(req.session.userId), 1);
+        delete req.session.userId;
+        delete req.session.username;
+        delete req.session.rol;
+        util.sendError(res, 403, error.ERR_AUTHENTICATION, new Error('Forbidden response for this User'))
+    } else if (req.session.rol === 1) next()
     else util.sendError(res, 403, error.ERR_AUTHENTICATION, new Error('Forbidden response for this User'))
 };
 
 util.isRevisor = function(req, res, next) {
-    if (req.session.rol == 2) next()
+    if (req.session.rol === 2) next()
     else util.sendError(res, 403, error.ERR_AUTHENTICATION, new Error('Forbidden response for this User'))
 };
 
 util.isNotAuthenticated = function(req, res, next) {
     if (req.session.userId) util.sendError(res, 400, error.ERR_AUTHENTICATION, new Error('User is already authenticated'))
     else next()
-}
+};
 
-module.exports = util
+module.exports = util;
 

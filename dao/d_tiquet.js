@@ -32,7 +32,6 @@ module.exports = function (app, dao) {
         })
     };
     Tiquet.getByDataFi = function(dataFi) {
-        console.log(dataFi);
         return db.Tiquet.findAll({
             include: [
                 { model: db.Vehicle, attributes:["matricula"], include: [{model: db.Marca, attributes:["nom"] }, {model: db.Color, attributes:["nom"] } ] },
@@ -48,8 +47,6 @@ module.exports = function (app, dao) {
     Tiquet.getByData = function (data) {
         var d1 = new Date(new Date(data).setUTCHours(0,0,0,0));
         var d2 = new Date(new Date(data).setUTCHours(23,59,59,59));
-        console.log(d1);
-        console.log(d2);
         return db.Tiquet.findAll({
             include: [
                 { model: db.Vehicle, attributes:["matricula"], include: [{model: db.Marca, attributes:["nom"] }, {model: db.Color, attributes:["nom"] } ] },
