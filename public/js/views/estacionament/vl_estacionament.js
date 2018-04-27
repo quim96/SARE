@@ -1,9 +1,12 @@
 var tl_tiquet = require("raw-loader!../../../templates/estacionament/tl_estacionament.html");
 
 var VehicleItemView = require('./v_vehicleItem');
+var AreaItemView = require('./v_areaItem')
 var ColorItemView = require('./v_colorItem');
 var Vehicle = require('../../models/m_vehicle')
 var Common = require('../../common');
+var $table;
+var $tableZona;
 var TiquetListView = Backbone.View.extend({
     initialize: function(params) {
         this.eventBus = params.eventBus;
@@ -12,6 +15,8 @@ var TiquetListView = Backbone.View.extend({
 
         this.localEventBus = _.extend({}, Backbone.Events);
         this.localEventBus.on('view:vehicle:select', this.showZona.bind(this));
+        this.localEventBus.on('view:area:select', this.showDurada.bind(this));
+
     },
 
     events: {
@@ -27,24 +32,34 @@ var TiquetListView = Backbone.View.extend({
 
         var localEventBus = this.localEventBus;
         $table = this.$el.find('#taulaVehicle');
+        $tableZona = this.$el.find('#taulaZona');
 
+        test =this.collection.vehicles;
         var marques = this.collection.marcas;
         this.collection.vehicles.each(function(item) {
             $table.append(new VehicleItemView({model: item, collection: marques, eventBus: localEventBus}).render().el)
         });
-        $table.append('<tr><td class="fz16 centre"><button id="afegirVehicle" class="btn btn-primary">Afegir Vehicle</button></td></tr>');
+        this.collection.arees.each(function(item) {
+            $tableZona.append(new AreaItemView({model: item, collection: marques, eventBus: localEventBus}).render().el)
+        });
 
+        $table.append('<tr><td class="fz16 centre"><button id="afegirVehicle" class="btn btn-primary">Afegir Vehicle</button></td></tr>');
 
         return this;
     },
     showZona: function(id) {
         this.$el.find('#step1').removeClass('active').addClass('complete');
-        this.$el.find('#step2').addClass('active')//.removeClass('disabled');
+        this.$el.find('#step2').addClass('active').removeClass('disabled');
+        $table.addClass('hidden');
+        $tableZona.removeClass('hidden');
     },
-
-
+    showDurada: function(id) {
+        this.$el.find('#step2').removeClass('active').addClass('complete');
+        this.$el.find('#step3').addClass('active').removeClass('disabled');
+        $tableZona.addClass('hidden');
+    },
     cancelar: function() {
-        this.$el.find('#taulaVehicle').removeClass('hidden');
+        $table.removeClass('hidden');
         this.$el.find('#crearEditarVehicle').addClass('hidden');
 
     },

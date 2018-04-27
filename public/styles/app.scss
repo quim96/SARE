@@ -91,6 +91,9 @@ th {
 .bs-wizard > .complete > .bs-wizard-dot:after{
   background-color: #fbe8aa;
 }
+.progress-bar{
+  transition: none;
+}
 /*END Form Wizard*/
 
 table.t_estacionament{

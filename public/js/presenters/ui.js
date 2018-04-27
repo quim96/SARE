@@ -116,20 +116,24 @@ Ui.switchContent = function (widget) {
             localStorage.setItem('last', 'estacionament');
             if (localStorage.hasItem('user')) {
                 vehicleList.fetch({
-                    success: function () {
+                    success: function (){
                         marcaList.fetch({
-                            success: function () {
-                                lastContent = new EstacionamentView({
-                                    el: $content, eventBus: EventBus, collection: {
-                                        vehicles: vehicleList,
-                                        colors: colorList,
-                                        marcas: marcaList
+                            success: function (){
+                                areaList.fetch({
+                                    success: function (){
+                                        lastContent = new EstacionamentView({
+                                            el: $content, eventBus: EventBus, collection: {
+                                                vehicles: vehicleList,
+                                                colors: colorList,
+                                                marcas: marcaList,
+                                                arees: areaList
+                                            }
+                                        }).render();
                                     }
-                                }).render();
-                            },
-                            error: Ui.error});
-                    },
-                    error: Ui.error
+                                })
+                            }
+                        });
+                    }
                 });
             } else
                 Ui.switchContent('login');
