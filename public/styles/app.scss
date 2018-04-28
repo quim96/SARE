@@ -65,13 +65,17 @@
   width: 57px;
 }
 
+body {
+  background: #e7e7e7;
+}
+
 th {
   min-width: 100px;
 }
 
 
 /*Form Wizard*/
-.bs-wizard {border-bottom: solid 1px #e0e0e0; padding: 0 0 10px 0;}
+.bs-wizard { padding: 0 0 10px 0;}
 .bs-wizard > .bs-wizard-step {padding: 0; position: relative;}
 .bs-wizard > .bs-wizard-step + .bs-wizard-step {}
 .bs-wizard > .bs-wizard-step .bs-wizard-stepnum {color: #595959; font-size: 16px; margin-bottom: 5px;}
@@ -96,10 +100,7 @@ th {
 }
 /*END Form Wizard*/
 
-table.t_estacionament{
-  max-width: 500px;
-  margin: 0 auto;
-}
+
 
 table.t_estacionament td{
   cursor: pointer;
@@ -129,4 +130,16 @@ table.t_estacionament th{
 #crearEditarVehicle {
   max-width: 500px;
   margin: 0 auto;
+}
+
+#estacionament {
+  margin: auto;
+  max-width: 700px;
+}
+
+.roundBorder {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: white;
 }
