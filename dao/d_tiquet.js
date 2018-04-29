@@ -15,9 +15,58 @@ module.exports = function (app, dao) {
                 else return tiquet
             })
     };
+    Tiquet.getByDataIniFi = function(dataIn, dataFi) {
+        d1 = new Date(dataIn);
+        d2 = new Date(dataFi);
+        return db.Tiquet.find({
+            where: {
+                $or: {
+                    dataInici: {
+                        $between: [d1, d2]
+                    },
+                    dataFi: {
+                        $between: [d1, d2]
+                    }
+                }
+            }
+        })
+    };
+    Tiquet.getByDataFi = function(dataFi) {
+        return db.Tiquet.findAll({
+            include: [
+                { model: db.Vehicle, attributes:["matricula"], include: [{model: db.Marca, attributes:["nom"] }, {model: db.Color, attributes:["nom"] } ] },
+                { model: db.Area, attributes: ["nom"] }
+            ],
+            where: {
+                dataFi: {
+                    $gte: new Date(dataFi)
+                }
+            }
+        })
+    };
+    Tiquet.getByData = function (data) {
+        var d1 = new Date(new Date(data).setUTCHours(0,0,0,0));
+        var d2 = new Date(new Date(data).setUTCHours(23,59,59,59));
+        return db.Tiquet.findAll({
+            include: [
+                { model: db.Vehicle, attributes:["matricula"], include: [{model: db.Marca, attributes:["nom"] }, {model: db.Color, attributes:["nom"] } ] },
+                { model: db.Area, attributes: ["nom"] }
+            ],
+            where: {
+                $or: {
+                    dataInici: {
+                        $between: [d1, d2]
+                    },
+                    dataFi: {
+                        $between: [d1, d2]
+                    }
+                }
+            }
+        })
+    };
     Tiquet.getAllTiquets = function () {
         return db.Tiquet.findAll({
-            order: [['nom', 'ASC']]
+            order: [['dataInici', 'ASC']]
         });
     };
 

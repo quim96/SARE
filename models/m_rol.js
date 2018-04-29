@@ -8,7 +8,8 @@ module.exports = function(sequelize, DataTypes) {
 		nom : DataTypes.STRING(255),
 	}, {
 		classMethods : {
-
+            associate : function(models) {
+            }
 		}
 	});
 

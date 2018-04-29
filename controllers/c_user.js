@@ -23,9 +23,10 @@ module.exports = function (app) {
 
             dao.User.checkPassword(req.body.username, req.body.password)
                 .then(function (user) {
-                    req.session.userId = user.id
-                    req.session.username = user.username
-                    util.jsonResponse(res, {userId: user.id, username: user.username});
+                    req.session.userId = user.id;
+                    req.session.username = user.username;
+                    req.session.rol = user.RolId;
+                    util.jsonResponse(res, {userId: user.id, username: user.username, rol: user.RolId});
                 })
                 .catch(util.sendError.bind(util, res, 400, util.Error.ERR_BAD_REQUEST))
                 .done();
@@ -33,8 +34,9 @@ module.exports = function (app) {
 
         logout: function (req, res) {
             if (!req.session.userId) util.sendError(res, 400, util.Error.ERR_AUTHENTICATION, 'Not logged in!')
-            delete req.session.userId
-            delete req.session.username
+            delete req.session.userId;
+            delete req.session.username;
+            delete req.session.rol;
             util.jsonResponse(res, {})
         },
 
@@ -67,14 +69,8 @@ module.exports = function (app) {
         },
 
         check: function (req, res) {
-            if (req.session.userId) util.jsonResponse(res, {userId: req.session.userId, username: req.session.username})
+            if (req.session.userId) util.jsonResponse(res, {userId: req.session.userId, username: req.session.username, rol: req.session.rol})
             else util.sendError(res, 400, util.Error.ERR_AUTHENTICATION, 'User has not signed up')
-        },
-        getRols: function (req, res) {
-            dao.User.getAdmin(req.session.userId, {})
-                .then(util.jsonResponse.bind(util, res))
-                .catch(util.sendError.bind(util, res, 400, util.Error.ERR_BAD_REQUEST))
-                .done();
         }
     }
 }

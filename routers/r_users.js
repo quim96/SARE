@@ -4,6 +4,7 @@ module.exports = function (app) {
 
     var Users = require('../controllers/c_user')(app);
     var Orders = require('../controllers/c_orders')(app);
+    var Vehicles = require('../controllers/c_vehicles')(app);
 
     var util = require('../util');
 
@@ -20,7 +21,7 @@ module.exports = function (app) {
     // Get all ordeers belonging to the signed in user
     router.get('/self/orders', util.isAuthenticated, Orders.getOrders);
 
-    router.get('/self/rols', util.isAuthenticated, Users.getRols);
+    router.get('/self/vehicles', util.isAuthenticated, Vehicles.getVehicles);
 
     return router;
 }

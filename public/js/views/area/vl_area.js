@@ -6,7 +6,6 @@ var AreaListView = Backbone.View.extend({
     initialize: function(params) {
         this.eventBus = params.eventBus;
         this.template = _.template(tl_area);
-        this.lastDetail = null;
 
         this.localEventBus = _.extend({}, Backbone.Events);
 
@@ -26,7 +25,6 @@ var AreaListView = Backbone.View.extend({
         this.$el.html(this.template({areas: this.collection}));
 
         this.showContent();
-        this.collection;
         this.carregarTaula();
         return this;
     },
@@ -45,35 +43,35 @@ var AreaListView = Backbone.View.extend({
         var src_nom = this.$el.find('#txt_nom').val();
         var src_preuMin = this.$el.find('#txt_preuMin').val();
         var src_maxMin = this.$el.find('#txt_maxMin').val();
-        var itemCerca = this.collection;
-        aux = itemCerca;
+        var itemCerca = [];
+        var aux = this.collection;
         if (src_id != "" ) {
             aux.forEach(function (item) {
                 if (src_id != "" && item.get("id").toString().toLowerCase().includes(src_id.toLowerCase())) {
                     itemCerca.push(item);
                 }
             });
+            aux = itemCerca;
         }
         if (src_nom != "" ) {
-            aux = itemCerca;
             itemCerca = [];
             aux.forEach(function (item) {
                 if (src_nom != "" && item.get("nom").toString().toLowerCase().includes(src_nom.toLowerCase())) {
                     itemCerca.push(item);
                 }
             });
+            aux = itemCerca;
         }
         if (src_preuMin != "" ) {
-            aux = itemCerca;
             itemCerca = [];
             aux.forEach(function (item) {
                 if (src_preuMin != "" && item.get("preuMinut").toString().toLowerCase().includes(src_preuMin.toLowerCase())) {
                     itemCerca.push(item);
                 }
             });
+            aux = itemCerca;
         }
         if (src_maxMin != "" ) {
-            aux = itemCerca;
             itemCerca = [];
             aux.forEach(function (item) {
                 if (src_maxMin != "" && item.get("maxMinuts").toString().toLowerCase().includes(src_maxMin.toLowerCase())) {
@@ -94,7 +92,7 @@ var AreaListView = Backbone.View.extend({
         }
     },
     showCreate: function() {
-        this.$el.find('.titolPag').text("Crear area");
+        this.$el.find('.titolPag').text("Crear àrea");
         this.$el.find('#nom').val('');
         this.showCreEdi();
     },
@@ -104,7 +102,7 @@ var AreaListView = Backbone.View.extend({
     },
     showContent: function() {
         areaEdit = null;
-        this.$el.find('.titolPag').text("areas");
+        this.$el.find('.titolPag').text("Àrees");
         this.$el.find('.crearEditar').hide();
         this.$el.find('.contingut').show();
     },
@@ -138,18 +136,15 @@ var AreaListView = Backbone.View.extend({
         this.render();
     },
     showEdit: function(id) {
-        areaEdit =  this.collection.get(id);
+        var areaEdit =  this.collection.get(id);
+        this.$el.find('.titolPag').text("Editar àrea " + areaEdit.get("id"));
         this.showCreEdi();
-        console.log(areaEdit);
-        ttt = areaEdit;
-        console.log(areaEdit.get('preuMinut'));
         this.$el.find('#nom').val(areaEdit.get('nom'));
         this.$el.find('#preuMinut').val(areaEdit.get('preuMinut'));
         this.$el.find('#maxMinuts').val(areaEdit.get('maxMinuts'));
     },
     showDelete: function(id) {
-        areaEdit =  this.collection.get(id);
-        console.log(areaEdit);
+        var areaEdit =  this.collection.get(id);
         this.$el.find('#esborrarCol').text(areaEdit.get('nom'));
         this.$el.find('#popup').modal();
     },

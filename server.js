@@ -23,7 +23,8 @@ app.use(function (error, req, res, next) {
     error.location = "ERROR_JSON_PARSE";
     error.code = 400;
     next(error);
-})
+});
+
 app.use(methodOverride());
 app.use(cors());
 app.use(session({
@@ -39,9 +40,7 @@ app.use(serveStatic(path.join(__dirname, 'public'), {'index': ['index.html', 'in
 app.db = require('./models')
 
 app.db.init(app.get('env'))
-    .then(function(user) {
-        return app.db.Vehicle.create({nom: 'Creant Cotxe'})
-    })
+
     //Inserir Colors
     .then(function() {return app.db.Color.create({nom: 'Vermell'})})
     .then(function() {return app.db.Color.create({nom: 'Verd'})})
@@ -66,9 +65,20 @@ app.db.init(app.get('env'))
     .then(function() {return app.db.Color.create({nom: 'Blanc'})})
     .then(function() {return app.db.Color.create({nom: 'Negre'})})
     .then(function() {return app.db.Rol.create({nom: 'Admin'})})
+    .then(function() {return app.db.Rol.create({nom: 'User'})})
+    .then(function() {return app.db.Rol.create({nom: 'Worker'})})
+    .then(function() {return app.db.Area.create({nom: 'Blava', preuMinut: 2.5, maxMinuts: 90})})
+    .then(function() {return app.db.Marca.create({nom: 'Audi'})})
+    .then(function() {return app.db.Vehicle.create({ matricula: '4432CGN', MarcaId: 1})})
+    .then(function() {return app.db.Tiquet.create({dataInici: new Date(), dataFi: '2018-04-23 22:15:00', import: 2.5, VehicleId: 1, AreaId: 1})})
+    .then(function() {return app.db.Tiquet.create({dataInici: '2018-03-02 10:15', dataFi: '2018-04-22 11:15', import: 2.5, VehicleId: 1, AreaId: 1})})
+
     //Fi Inserir Colors
     .then(function() {
         return app.db.User.create({username: 'jo', password: bcrypt.hashSync('jo'), email: 'jo@jo.com', RolId: 1})
+    })
+    .then(function() {
+        return app.db.User.create({username: 'usuari', password: bcrypt.hashSync('usuari'), email: 'user@jo.com', RolId: 2})
     })
     .then(function(user) {
         return app.db.Order.create({description: 'My first order'})
@@ -88,6 +98,9 @@ app.db.init(app.get('env'))
         app.use('/api/orders', require('./routers/r_orders')(app));
         app.use('/api/colors', require('./routers/r_colors')(app));
         app.use('/api/arees', require('./routers/r_arees')(app));
+        app.use('/api/tiquets', require('./routers/r_tiquets')(app));
+        app.use('/api/vehicles', require('./routers/r_vehicles')(app));
+        app.use('/api/marcas', require('./routers/r_marcas')(app));
 
         app.use(function (err, req, res, next) {
             var code = err.code || 500;
@@ -103,7 +116,7 @@ app.db.init(app.get('env'))
 
 
         var port = process.env.OPENSHIFT_NODEJS_PORT || app.get('port');
-        var ip = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
+        var ip = process.env.OPENSHIFT_NODEJS_IP || "192.168.1.129";
 
         http.createServer(app).listen(port, ip, function () {
             console.log("Express server listening on " + ip + ":" + port);

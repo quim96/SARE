@@ -30,7 +30,6 @@ var OrderListView = Backbone.View.extend({
         this.$el.html(this.template({orders: this.collection}))
         var $orderList = this.$el.find('.list-group')
         var localEventBus = this.localEventBus;
-        console.log(this.collection);
         this.collection.each(function(order) {
             $orderList.append(new OrderItemView({model: order, eventBus: localEventBus}).render().el)
         });

@@ -1,0 +1,79 @@
+<div>
+    <div class="contingut">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="roundBorder" id="estacionament">
+                    <div class="row bs-wizard">
+
+                        <div id="step1" class="pas col-xs-3 bs-wizard-step active">
+                            <div class="text-center bs-wizard-stepnum">Vehicle</div>
+                            <div class="progress"><div class="progress-bar"></div></div>
+                            <a class="bs-wizard-dot"></a>
+                        </div>
+
+                        <div id="step2" class="pas col-xs-3 bs-wizard-step disabled">
+                            <div class="text-center bs-wizard-stepnum">Zona</div>
+                            <div class="progress"><div class="progress-bar"></div></div>
+                            <a class="bs-wizard-dot"></a>
+                        </div>
+
+                        <div id="step3" class="pas col-xs-3 bs-wizard-step disabled">
+                            <div class="text-center bs-wizard-stepnum">Durada</div>
+                            <div class="progress"><div class="progress-bar"></div></div>
+                            <a href="#" class="bs-wizard-dot"></a>
+                        </div>
+
+                        <div id="step4" class="pas col-xs-3 bs-wizard-step disabled">
+                            <div class="text-center bs-wizard-stepnum">Pagament</div>
+                            <div class="progress"><div class="progress-bar"></div></div>
+                            <a class="bs-wizard-dot"></a>
+                        </div>
+                    </div>
+
+
+                    <table id="taulaVehicle" class="step t_estacionament table table-hover table-striped">
+                        <thead>
+                        <tr>
+                            <th class="fz18">Escollir Vehicle</td></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                    <table id="taulaArea" class="hidden step t_estacionament table table-hover table-striped">
+                        <thead>
+                        <tr>
+                            <th class="fz18">Escollir Àrea</td></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                    <div id="divRellotge" class="step hidden estacionament">
+                        <span>Hello World</span>
+                        <div id="rellotge"></div>
+
+                    </div>
+                    <div id="crearEditarVehicle" class="step estacionament hidden">
+                        <div id="errorForm" class="hidden alert alert-danger"><strong>Error!</strong> S'han d'omplir tots els camps.</div>
+                        <div class="form-group">
+                            <input class="form-control" type="text" placeholder="Matricula" id="matricula">
+                        </div>
+                        <div class="form-group">
+                            <select class="form-control" id="colors">
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <select class="form-control" id="marques">
+                            </select>
+                        </div>
+                        <div>
+                            <button id="cancelar" class="btn btn-default tornar">Cancel·lar</button>
+                            <button id="btnCrear" class="btn btn-primary">Crear</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

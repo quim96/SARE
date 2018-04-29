@@ -11,8 +11,8 @@ module.exports = function(sequelize, DataTypes) {
 		classMethods : {
             associate : function(models) {
                 Vehicle.belongsTo(models.Color);
-                Vehicle.belongsTo(models.Matricula);
-                Vehicle.belongsTo(models.User)
+                Vehicle.belongsTo(models.User);
+                Vehicle.belongsTo(models.Marca)
             }
 		}
 	});

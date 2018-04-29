@@ -13,6 +13,9 @@ Router.init = function () {
             'orders': 'showOrders',
             'colors': 'showColors',
             'arees': 'showArees',
+            'tiquetsDia': 'showTiquetsDia',
+            'tiquetsAct': 'showTiquetsAct',
+            'estacionament': 'showEstacionament',
 
             // Default
             '*actions': 'defaultAction'
@@ -36,12 +39,23 @@ Router.init = function () {
 
         showArees: function () {
             EventBus.trigger('ui:switch:arees')
-        }
-    })
+        },
 
-    new AppRouter()
+        showTiquetsDia: function () {
+            EventBus.trigger('ui:switch:tiquetsDia')
+        },
+        showTiquetsAct: function () {
+            EventBus.trigger('ui:switch:tiquetsAct')
+        },
+        showEstacionament: function () {
+            EventBus.trigger('ui:switch:estacionament')
+        }
+
+    });
+
+    new AppRouter();
 
     Backbone.history.start()
 }
 
-module.exports = Router
+module.exports = Router;

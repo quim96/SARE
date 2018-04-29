@@ -9,10 +9,10 @@ module.exports = function(app) {
     var router = express.Router();
 
     router.get('/:id', util.isAuthenticated, Arees.getById);
-    router.put('/:id', util.isAuthenticated, Arees.edit);
-    router.delete('/:id', util.isAuthenticated, Arees.esborrar);
+    router.put('/:id', util.isAdmin, Arees.edit);
+    router.delete('/:id', util.isAdmin, Arees.esborrar);
     router.get('/', util.isAuthenticated, Arees.getAll);
-    router.post('/', util.isAuthenticated, Arees.create);
+    router.post('/', util.isAdmin, Arees.create);
 
     return router
 }

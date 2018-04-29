@@ -6,7 +6,6 @@ var ColorListView = Backbone.View.extend({
     initialize: function(params) {
         this.eventBus = params.eventBus;
         this.template = _.template(tl_color);
-        this.lastDetail = null;
 
         this.localEventBus = _.extend({}, Backbone.Events);
 
@@ -26,7 +25,6 @@ var ColorListView = Backbone.View.extend({
         this.$el.html(this.template({colors: this.collection}));
 
         this.showContent();
-        this.collection;
         this.carregarTaula();
         return this;
     },
@@ -44,17 +42,18 @@ var ColorListView = Backbone.View.extend({
         var src_id = this.$el.find('#txt_id').val();
         var src_nom = this.$el.find('#txt_nom').val();
 
-        var itemCerca = this.collection;
-        aux = itemCerca;
+        var itemCerca = [];
+        var aux = this.collection;
         if (src_id != "" ) {
+            itemCerca = [];
             aux.forEach(function (item) {
                 if (src_id != "" && item.get("id").toString().toLowerCase().includes(src_id.toLowerCase())) {
                     itemCerca.push(item);
                 }
             });
+            aux = itemCerca;
         }
         if (src_nom != "" ) {
-            aux = itemCerca;
             itemCerca = [];
             aux.forEach(function (item) {
                 if (src_nom != "" && item.get("nom").toString().toLowerCase().includes(src_nom.toLowerCase())) {
@@ -115,12 +114,12 @@ var ColorListView = Backbone.View.extend({
     },
     showEdit: function(id) {
         colorEdit =  this.collection.get(id);
+        this.$el.find('.titolPag').text("Editar color " + colorEdit.get("id"));
         this.showCreEdi();
         this.$el.find('#nom').val(colorEdit.get('nom'));
     },
     showDelete: function(id) {
         colorEdit =  this.collection.get(id);
-        console.log(colorEdit);
         this.$el.find('#esborrarCol').text(colorEdit.get('nom'));
         this.$el.find('#popup').modal();
     },
