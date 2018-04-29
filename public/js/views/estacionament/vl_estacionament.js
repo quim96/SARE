@@ -1,12 +1,18 @@
 var tl_tiquet = require("raw-loader!../../../templates/estacionament/tl_estacionament.html");
 
+var Vehicle = require('../../models/m_vehicle');
 var VehicleItemView = require('./v_vehicleItem');
-var AreaItemView = require('./v_areaItem')
-var ColorItemView = require('./v_colorItem');
-var Vehicle = require('../../models/m_vehicle')
-var Common = require('../../common');
+
+var AreaItemView = require('./v_areaItem');
+require('../../module/rellotge');
+var rellotge = false;
 var $table;
-var $tableZona;
+var $tableArea;
+
+var idVehicle;
+var idArea;
+var temps;
+
 var TiquetListView = Backbone.View.extend({
     initialize: function(params) {
         this.eventBus = params.eventBus;
@@ -14,49 +20,102 @@ var TiquetListView = Backbone.View.extend({
         this.template = _.template(tl_tiquet);
 
         this.localEventBus = _.extend({}, Backbone.Events);
-        this.localEventBus.on('view:vehicle:select', this.showZona.bind(this));
+        this.localEventBus.on('view:vehicle:select', this.showArea.bind(this));
         this.localEventBus.on('view:area:select', this.showDurada.bind(this));
 
     },
 
     events: {
         'click #afegirVehicle': 'afegirVehicle',
+        'click #step1': 'showVehicles',
+        'click #step2': 'showArea',
+        'click #step3': 'showDurada',
         'click #cancelar': 'cancelar',
         'click #btnCrear': 'crearEditar',
         'change #colors' : 'updateColor'
     },
 
     render: function() {
-        this.$el.html(this.template({vehicles: this.collection.vehicles}));
+
+        this.$el.html(this.template());
+
+
         this.eventBus.trigger('tab:change', 'estacionament');
 
         var localEventBus = this.localEventBus;
         $table = this.$el.find('#taulaVehicle');
-        $tableZona = this.$el.find('#taulaZona');
+        $tableArea = this.$el.find('#taulaArea');
+        $rellotge = this.$el.find('#divRellotge');
 
-        test =this.collection.vehicles;
+
         var marques = this.collection.marcas;
         this.collection.vehicles.each(function(item) {
             $table.append(new VehicleItemView({model: item, collection: marques, eventBus: localEventBus}).render().el)
         });
-        this.collection.arees.each(function(item) {
-            $tableZona.append(new AreaItemView({model: item, collection: marques, eventBus: localEventBus}).render().el)
-        });
-
         $table.append('<tr><td class="fz16 centre"><button id="afegirVehicle" class="btn btn-primary">Afegir Vehicle</button></td></tr>');
+
+
+        this.collection.arees.each(function(item) {
+            $tableArea.append(new AreaItemView({model: item, eventBus: localEventBus}).render().el)
+        });
 
         return this;
     },
-    showZona: function(id) {
-        this.$el.find('#step1').removeClass('active').addClass('complete');
-        this.$el.find('#step2').addClass('active').removeClass('disabled');
+    showVehicles: function() {
+        this.$el.find('.pas').removeClass('active complete disabled punter');
+        this.$el.find('#step1').addClass('active');
+        this.$el.find('#step2').addClass('disabled');
+        this.$el.find('#step3').addClass('disabled');
+        this.$el.find('#step4').addClass('disabled');
+
+        this.$el.find('.step').addClass('hidden');
+        $rellotge.addClass('hidden');
+        $tableArea.addClass('hidden');
+        $table.removeClass('hidden');
+    },
+
+    showArea: function(id) {
+        if(Number.isInteger(id))
+            idVehicle = id;
+        else if(!this.$el.find('#step2').hasClass('punter')){
+            return;
+        }
+        this.$el.find('.pas').removeClass('active complete disabled punter');
+        this.$el.find('#step1').addClass('complete punter');
+        this.$el.find('#step2').addClass('active');
+        this.$el.find('#step3').addClass('disabled');
+        this.$el.find('#step4').addClass('disabled');
+
+
         $table.addClass('hidden');
-        $tableZona.removeClass('hidden');
+        $rellotge.addClass('hidden');
+        $tableArea.removeClass('hidden');
     },
     showDurada: function(id) {
-        this.$el.find('#step2').removeClass('active').addClass('complete');
-        this.$el.find('#step3').addClass('active').removeClass('disabled');
-        $tableZona.addClass('hidden');
+        console.log(Number.isInteger(id));
+        if(Number.isInteger(id)) {
+            if (Number.isInteger(idArea)) {
+                this.$el.find('#rellotge').remove();
+                this.$el.find('#divRellotge').append('<div id="rellotge"></div>')
+            }
+            idArea = id;
+        }
+        else if(!this.$el.find('#step3').hasClass('punter')){
+            return;
+        }
+        this.$el.find('.pas').removeClass('active complete disabled punter');
+        this.$el.find('#step1').addClass('complete punter');
+        this.$el.find('#step2').addClass('complete punter');
+        this.$el.find('#step3').addClass('active');
+        this.$el.find('#step4').addClass('disabled');
+        $table.addClass('hidden');
+        $tableArea.addClass('hidden');
+
+        console.log(this.$el.find('#rellotge'));
+
+        this.$el.find('#rellotge').clockpicker({minuts: this.collection.arees.get(idArea).get('maxMinuts'), franges: 5});
+
+        this.$el.find('#rellotge').removeClass('hidden');
     },
     cancelar: function() {
         $table.removeClass('hidden');
@@ -66,8 +125,7 @@ var TiquetListView = Backbone.View.extend({
 
     afegirVehicle: function () {
         this.$el.find('#matricula').val('');
-        this.$el.find('#errorForm').addClass('hidden');
-        this.$el.find('#taulaVehicle').addClass('hidden');
+        this.$el.find('.step').addClass('hidden');
         this.$el.find('#crearEditarVehicle').removeClass('hidden');
         $colors = this.$el.find('#colors');
         $colors.find('option').remove().end().append('<option disabled selected value>Color</option>')

@@ -116,7 +116,7 @@ app.db.init(app.get('env'))
 
 
         var port = process.env.OPENSHIFT_NODEJS_PORT || app.get('port');
-        var ip = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
+        var ip = process.env.OPENSHIFT_NODEJS_IP || "192.168.1.129";
 
         http.createServer(app).listen(port, ip, function () {
             console.log("Express server listening on " + ip + ":" + port);

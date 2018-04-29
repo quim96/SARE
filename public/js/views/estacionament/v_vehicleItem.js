@@ -8,8 +8,7 @@ var VehicleItemView = Backbone.View.extend({
     tagName: 'tr',
     className: 'trCont',
     events: {
-        'click td': 'click',
-        'click .fa-ban': 'delete'
+        'click td': 'click'
     },
     render: function () {
         this.$el.html(this.template({item: this.model, marques: this.collection}));
@@ -20,9 +19,6 @@ var VehicleItemView = Backbone.View.extend({
         this.eventBus.trigger('view:vehicle:select', this.model.get('id'));
     },
 
-    delete: function () {
-        this.eventBus.trigger('view:color:delete', this.model.get('id'));
-    }
 
 });
 
