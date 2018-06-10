@@ -8,7 +8,7 @@ module.exports = function (app) {
 
     return {
         create: function (req, res) {
-            util.checkParams(req.body, ['nom']);
+            util.checkParams(req.body, ['import', 'VehicleId', 'AreaId']);
 
             db.sequelize.transaction(function (t) {
                 return dao.User.getById(req.session.userId, t)
@@ -70,13 +70,32 @@ module.exports = function (app) {
                     .done();
             }
         },
-        getById: function (req, res) {
-            util.checkParams(req.params, ['id']);
-                dao.Tiquet.getById(req.params.id)
+        consultar: function (req, res) {
+            if(util.containsParam(req.query, ['matricula'])){
+                dao.Tiquet.getByMatricula(req.query.matricula)
                     .then(util.jsonResponse.bind(util, res))
                     .catch(util.sendError.bind(util, res, 400, util.Error.ERR_BAD_REQUEST))
                     .done();
-            },
+            } else {
+                dao.Tiquet.getByData(new Date())
+                    .then(util.jsonResponse.bind(util, res))
+                    .catch(util.sendError.bind(util, res, 400, util.Error.ERR_BAD_REQUEST))
+                    .done();
+            }
+        },
+        getTiquetsUsuari: function (req, res) {
+                dao.Tiquet.getUserTiquetsData(req.session.userId, req.query.dataFi)
+                    .then(util.jsonResponse.bind(util, res))
+                    .catch(util.sendError.bind(util, res, 400, util.Error.ERR_BAD_REQUEST))
+                    .done();
+        },
+        getById: function (req, res) {
+            util.checkParams(req.params, ['id']);
+            dao.Tiquet.getById(req.params.id)
+                .then(util.jsonResponse.bind(util, res))
+                .catch(util.sendError.bind(util, res, 400, util.Error.ERR_BAD_REQUEST))
+                .done();
+        },
         getByData: function (req, res) {
             dao.Tiquet.getByData(req.params.data)
                 .then(util.jsonResponse.bind(util, res))

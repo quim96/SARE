@@ -15,7 +15,13 @@ Router.init = function () {
             'arees': 'showArees',
             'tiquetsDia': 'showTiquetsDia',
             'tiquetsAct': 'showTiquetsAct',
+            'tiquetsHist': 'showTiquetsHist',
             'estacionament': 'showEstacionament',
+            'homeUsuari': 'showHomeUsuari',
+            'marques': 'showMarques',
+            'sancions': 'showSancions',
+            'vehicles': 'showVehicles',
+            'revisor': 'showRevisor',
 
             // Default
             '*actions': 'defaultAction'
@@ -27,10 +33,6 @@ Router.init = function () {
 
         signup: function () {
             EventBus.trigger('ui:switch:signup')
-        },
-
-        showOrders: function () {
-            EventBus.trigger('ui:switch:orders')
         },
 
         showColors: function () {
@@ -49,6 +51,24 @@ Router.init = function () {
         },
         showEstacionament: function () {
             EventBus.trigger('ui:switch:estacionament')
+        },
+        showHomeUsuari: function () {
+            EventBus.trigger('ui:switch:homeUsuari')
+        },
+        showMarques: function () {
+            EventBus.trigger('ui:switch:marques')
+        },
+        showSancions: function () {
+            EventBus.trigger('ui:switch:sancions')
+        },
+        showTiquetsHist: function () {
+            EventBus.trigger('ui:switch:tiquetsHist')
+        },
+        showVehicles: function () {
+            EventBus.trigger('ui:switch:vehicles')
+        },
+        showRevisor: function () {
+            EventBus.trigger('ui:switch:revisor')
         }
 
     });

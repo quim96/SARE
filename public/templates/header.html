@@ -8,26 +8,30 @@
 </div>
 <div class="navbar-collapse collapse">
     <ul class="nav navbar-nav">
-        <li id="nav_home"><a href="#">Home</a></li>
         <% if (user && user.username && user.rol === 1) { %>
-        <li id="nav_color"><a href="#colors" >Colors</a></li>
         <li id="nav_area"><a href="#arees" >Àrees</a></li>
+        <li id="nav_color"><a href="#colors" >Colors</a></li>
+        <li id="nav_marca"><a href="#marques" >Marques</a></li>
+        <li id="nav_sancio"><a href="#sancions" >Sancions</a></li>
         <li class="dropdown" id="nav_tiquets">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Tiquets <span class="caret"></span></a>
             <ul class="dropdown-menu">
                 <li><a href="#tiquetsAct">Tiquets Actius</a></li>
                 <li><a href="#tiquetsDia">Resum diari</a></li>
-                <li><a href="#">Llistat</a></li>
+                <li><a href="#tiquetsHist">Històric</a></li>
             </ul>
         </li>
-        <% } else if (user && user.username && user.rol === 2) { %>
+        <li id="nav_vehicles"><a href="#vehicles" >Vehicles</a></li>
+        <% } else if (user && user.username && user.rol === 3) { %>
+        <li id="homeUsuari"><a href="#homeUsuari" >Tiquets Actius</a></li>
         <li id="estacionament"><a href="#estacionament" >Estacionament</a></li>
-        <li id="historic"><a href="#estacionament" >Històric</a></li>
+        <%} else if (user && user.username && user.rol === 2) { %>
+        <li id="revisor"><a href="#revisor" >Revisor</a></li>
         <%}%>
     </ul>
     <ul class="nav navbar-nav navbar-right">
         <% if (user && user.username) { %>
-        <li><a href='#profile'><%= user.username %></a></li>
+        <li><a><%= user.username %></a></li>
         <li><a style="cursor: pointer" title="Sortir" class='glyphicon glyphicon-log-out glywhite'></a></li>
         <% } %>
     </ul>

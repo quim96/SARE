@@ -11,7 +11,7 @@ module.exports = function(app) {
     router.put('/:id', util.isAdmin, Tiquet.edit);
     router.delete('/:id', util.isAdmin, Tiquet.esborrar);
     router.get('/', util.isAdmin, Tiquet.getAll);
-    router.post('/', util.isAdmin, Tiquet.create);
+    router.post('/', util.isAuthenticated, Tiquet.create);
 
     return router
 }

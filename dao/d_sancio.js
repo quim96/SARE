@@ -16,10 +16,40 @@ module.exports = function (app, dao) {
             })
     };
     Sancio.getAllSancios = function () {
+        return db.Sancio.findAll();
+    };
+    Sancio.getByData = function (data) {
+        var d1 = new Date(new Date(data).setUTCHours(0,0,0,0));
+        var d2 = new Date(new Date(data).setUTCHours(23,59,59,59));
         return db.Sancio.findAll({
-            order: [['nom', 'ASC']]
+            include: [
+                { model: db.Vehicle, attributes:["matricula"], include: [{model: db.Marca, attributes:["nom"] }, {model: db.Color, attributes:["nom"] } ] },
+                { model: db.Area, attributes: ["nom"] }
+            ],
+            where: {
+                data: {
+                    $between: [d1, d2]
+                }
+            }
         });
     };
+
+    Sancio.getByDataIniFi = function (dataIni, dataFi) {
+        var d1 = new Date(dataIni);
+        var d2 = new Date(dataFi);
+        return db.Sancio.findAll({
+            include: [
+                { model: db.Vehicle, attributes:["matricula"], include: [{model: db.Marca, attributes:["nom"] }, {model: db.Color, attributes:["nom"] } ] },
+                { model: db.Area, attributes: ["nom"] }
+            ],
+            where: {
+                data: {
+                    $between: [d1, d2]
+                }
+            }
+        });
+    };
+
 
     Sancio.create = function (sancio_data, user, t) {
         return db.Sancio.create(sancio_data, util.addTrans(t, {}))

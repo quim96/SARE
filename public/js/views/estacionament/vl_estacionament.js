@@ -1,6 +1,7 @@
 var tl_tiquet = require("raw-loader!../../../templates/estacionament/tl_estacionament.html");
 
 var Vehicle = require('../../models/m_vehicle');
+var Tiquet = require('../../models/m_tiquet');
 var VehicleItemView = require('./v_vehicleItem');
 
 var AreaItemView = require('./v_areaItem');
@@ -12,6 +13,8 @@ var $tableArea;
 var idVehicle;
 var idArea;
 var temps;
+var minuts;
+var preu;
 
 var TiquetListView = Backbone.View.extend({
     initialize: function(params) {
@@ -30,8 +33,10 @@ var TiquetListView = Backbone.View.extend({
         'click #step1': 'showVehicles',
         'click #step2': 'showArea',
         'click #step3': 'showDurada',
+        'click #pagar': 'showPagament',
         'click #cancelar': 'cancelar',
         'click #btnCrear': 'crearEditar',
+        'click #finalitzar': 'finalitzar',
         'change #colors' : 'updateColor'
     },
 
@@ -39,6 +44,9 @@ var TiquetListView = Backbone.View.extend({
 
         this.$el.html(this.template());
 
+        if(this.collection.tiquetsUsuari.length > 0) {
+            this.$el.find('#estacionamentAlert').removeClass('hidden');
+        }
 
         this.eventBus.trigger('tab:change', 'estacionament');
 
@@ -46,7 +54,7 @@ var TiquetListView = Backbone.View.extend({
         $table = this.$el.find('#taulaVehicle');
         $tableArea = this.$el.find('#taulaArea');
         $rellotge = this.$el.find('#divRellotge');
-
+        $pagament = this.$el.find('#pagament');
 
         var marques = this.collection.marcas;
         this.collection.vehicles.each(function(item) {
@@ -80,24 +88,19 @@ var TiquetListView = Backbone.View.extend({
         else if(!this.$el.find('#step2').hasClass('punter')){
             return;
         }
+        this.$el.find('.step').addClass('hidden');
         this.$el.find('.pas').removeClass('active complete disabled punter');
         this.$el.find('#step1').addClass('complete punter');
         this.$el.find('#step2').addClass('active');
         this.$el.find('#step3').addClass('disabled');
         this.$el.find('#step4').addClass('disabled');
 
-
-        $table.addClass('hidden');
-        $rellotge.addClass('hidden');
         $tableArea.removeClass('hidden');
     },
     showDurada: function(id) {
         console.log(Number.isInteger(id));
         if(Number.isInteger(id)) {
-            if (Number.isInteger(idArea)) {
-                this.$el.find('#rellotge').remove();
-                this.$el.find('#divRellotge').append('<div id="rellotge"></div>')
-            }
+
             idArea = id;
         }
         else if(!this.$el.find('#step3').hasClass('punter')){
@@ -108,14 +111,26 @@ var TiquetListView = Backbone.View.extend({
         this.$el.find('#step2').addClass('complete punter');
         this.$el.find('#step3').addClass('active');
         this.$el.find('#step4').addClass('disabled');
-        $table.addClass('hidden');
-        $tableArea.addClass('hidden');
+        this.$el.find('.step').addClass('hidden');
 
-        console.log(this.$el.find('#rellotge'));
+        this.$el.find('.rellotge').clockpicker({minuts: this.collection.arees.get(idArea).get('maxMinuts'), franges: 5});
 
-        this.$el.find('#rellotge').clockpicker({minuts: this.collection.arees.get(idArea).get('maxMinuts'), franges: 5});
+        $rellotge.removeClass('hidden');
 
-        this.$el.find('#rellotge').removeClass('hidden');
+    },
+    showPagament: function() {
+        this.$el.find('.pas').removeClass('active complete disabled punter');
+        this.$el.find('#step1').addClass('complete punter');
+        this.$el.find('#step2').addClass('complete punter');
+        this.$el.find('#step3').addClass('complete punter');
+        this.$el.find('#step4').addClass('active');
+
+        this.$el.find('.step').addClass('hidden');
+        minuts = Number(this.$el.find('.clockpicker-span-minuts').text());
+        preu = minuts * this.collection.arees.get(idArea).get('preuMinut');
+        $pagament.removeClass('hidden');
+        this.$el.find('#import').text(preu.toFixed(2));
+
     },
     cancelar: function() {
         $table.removeClass('hidden');
@@ -182,6 +197,22 @@ var TiquetListView = Backbone.View.extend({
         this.collection.vehicles.add(item);
         this.render();
     },
+
+    finalitzar: function () {
+        var data = {
+            import: preu,
+            VehicleId: idVehicle,
+            AreaId: idArea
+        };
+        var tiquet = new Tiquet();
+        model = this;
+        tiquet.save(data, {
+            success: function(tiquet) {
+                model.eventBus.trigger('ui:switch:homeUsuari')
+            }
+        });
+
+    }
 
 });
 

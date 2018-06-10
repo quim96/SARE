@@ -8,8 +8,6 @@ module.exports = function (app) {
 
     return {
         create: function (req, res) {
-            util.checkParams(req.body, ['nom']);
-
             db.sequelize.transaction(function (t) {
                 return dao.User.getById(req.session.userId, t)
                     .then(function (user) {
@@ -49,10 +47,17 @@ module.exports = function (app) {
                 .done();
         },
         getAll: function (req, res) {
-            dao.Vehicle.getAllVehicles()
-                .then(util.jsonResponse.bind(util, res))
-                .catch(util.sendError.bind(util, res, 400, util.Error.ERR_BAD_REQUEST))
-                .done();
+            if(util.containsParam(req.query, ['matricula'])){
+                dao.Vehicle.getByMatricula(req.query.matricula)
+                    .then(util.jsonResponse.bind(util, res))
+                    .catch(util.sendError.bind(util, res, 400, util.Error.ERR_BAD_REQUEST))
+                    .done();
+            } else {
+                dao.Vehicle.getAllVehicles()
+                    .then(util.jsonResponse.bind(util, res))
+                    .catch(util.sendError.bind(util, res, 400, util.Error.ERR_BAD_REQUEST))
+                    .done();
+            }
         },
         getById: function (req, res) {
             util.checkParams(req.params, ['id']);

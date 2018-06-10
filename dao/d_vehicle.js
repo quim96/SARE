@@ -17,7 +17,20 @@ module.exports = function (app, dao) {
     };
     Vehicle.getAllVehicles = function () {
         return db.Vehicle.findAll({
+            include: [
+                { model: db.Marca, attributes: ["nom"] },
+                { model: db.Color, attributes: ["nom"] }
+            ],
             order: [['nom', 'ASC']]
+        });
+    };
+
+    Vehicle.getByMatricula = function (matricula) {
+        console.log(matricula);
+        return db.Vehicle.findAll({
+            where: {
+                matricula: matricula
+            }
         });
     };
 

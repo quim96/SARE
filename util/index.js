@@ -74,14 +74,14 @@ util.isAdmin = function(req, res, next) {
         delete req.session.userId;
         delete req.session.username;
         delete req.session.rol;
-        util.sendError(res, 403, error.ERR_AUTHENTICATION, new Error('Forbidden response for this User'))
+        util.sendError(res, 403, error.ERR_AUTHENTICATION, new Error('Admin: Forbidden response for this User'))
     } else if (req.session.rol === 1) next()
-    else util.sendError(res, 403, error.ERR_AUTHENTICATION, new Error('Forbidden response for this User'))
+    else util.sendError(res, 403, error.ERR_AUTHENTICATION, new Error('Admin: Forbidden response for this User'))
 };
 
 util.isRevisor = function(req, res, next) {
     if (req.session.rol === 2) next()
-    else util.sendError(res, 403, error.ERR_AUTHENTICATION, new Error('Forbidden response for this User'))
+    else util.sendError(res, 403, error.ERR_AUTHENTICATION, new Error('Revisor: Forbidden response for this User'))
 };
 
 util.isNotAuthenticated = function(req, res, next) {

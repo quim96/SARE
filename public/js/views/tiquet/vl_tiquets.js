@@ -5,6 +5,7 @@ var TiquetListView = Backbone.View.extend({
     initialize: function(params) {
         this.eventBus = params.eventBus;
         this.titol = params.titol;
+        this.historic = params.historic;
         this.template = _.template(tl_tiquet);
 
         this.localEventBus = _.extend({}, Backbone.Events);
@@ -12,13 +13,33 @@ var TiquetListView = Backbone.View.extend({
 
     events: {
         'keyup .cercar' : 'cercar',
+        'click #find' : 'cercarDates'
     },
     render: function() {
         this.eventBus.trigger('tab:change', 'tiquets');
         this.$el.html(this.template({tiquets: this.collection}));
 
         this.$el.find('.titolPag').text(this.titol);
-        this.collection.each(function(item) {
+        console.log(this.historic);
+        if (this.historic)
+            this.$el.find('.cercador').removeClass('hidden');
+        this.carregarTaula();
+        return this;
+    },
+    cercarDates: function() {
+        model = this;
+        this.collection.fetch(
+            {
+                data: {
+                    dataInici: new Date(this.$el.find('#dataInici').val()),
+                    dataFi: new Date(this.$el.find('#dataFi').val())
+                }
+            }).then(function (collection) {
+            model.carregarTaula();
+        });
+    },
+    carregarTaula: function() {
+        this.collection.each(function (item) {
             var data = item.get("dataInici").split('T');
             var dataCurta = data[0].split('-');
             item.set("dataInici", dataCurta[2] + '/' + dataCurta[1] + '/' + dataCurta[0] + ' ' + data[1].split('.')[0]);
@@ -26,10 +47,6 @@ var TiquetListView = Backbone.View.extend({
             dataCurta = data[0].split('-');
             item.set("dataFi", dataCurta[2] + '/' + dataCurta[1] + '/' + dataCurta[0] + ' ' + data[1].split('.')[0]);
         });
-        this.carregarTaula();
-        return this;
-    },
-    carregarTaula: function() {
         this.$el.find('.trCont').remove();
         var localEventBus = this.localEventBus;
         $table = this.$el.find('#taula');

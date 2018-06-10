@@ -15,7 +15,6 @@ var ColorListView = Backbone.View.extend({
 
     events: {
         'click .crear' : 'showCreate',
-        'click .tornar' : 'showContent',
         'click .enviar' : 'save',
         'keyup .cercar' : 'cercar',
         'click #btnEsborrar' : 'delete'
@@ -24,7 +23,6 @@ var ColorListView = Backbone.View.extend({
         this.eventBus.trigger('tab:change', 'color');
         this.$el.html(this.template({colors: this.collection}));
 
-        this.showContent();
         this.carregarTaula();
         return this;
     },
@@ -78,14 +76,7 @@ var ColorListView = Backbone.View.extend({
         this.showCreEdi();
     },
     showCreEdi(){
-        this.$el.find('.contingut').hide();
-        this.$el.find('.crearEditar').show();
-    },
-    showContent: function() {
-        colorEdit = null;
-        this.$el.find('.titolPag').text("Colors");
-        this.$el.find('.crearEditar').hide();
-        this.$el.find('.contingut').show();
+        this.$el.find('#popupCrearEditar').modal();
     },
     save: function() {
         if (colorEdit == null) {
@@ -103,6 +94,7 @@ var ColorListView = Backbone.View.extend({
             colorEdit.set('nom', this.$el.find('#nom').val());
             var model = this;
             colorEdit.save().then(function (color) {
+                model.$el.find('#popupCrearEditar').modal('hide');
                 model.render();
             });
         }
@@ -110,6 +102,7 @@ var ColorListView = Backbone.View.extend({
     },
     add: function(item) {
         this.collection.add(item);
+        this.$el.find('#popupCrearEditar').modal('hide');
         this.render();
     },
     showEdit: function(id) {

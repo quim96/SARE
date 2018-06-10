@@ -1,0 +1,18 @@
+
+<table id="taula" class="table table-striped table-bordered">
+    <thead>
+    <tr>
+    </tr>
+    </thead>
+    <tbody class="t_body">
+    <tr><td><b>Temps Restant</b></td><td><span id="hor">00</span>:<span id="min">00</span>:<span id="seg"></span></td></tr>
+    <tr><td><b>Matricula</b></td><td><%= item.get('Vehicle').matricula%></td></tr>
+    <tr><td><b>Marca</b></td><td><%= item.get('Vehicle').Marca == null ? "" : item.get('Vehicle').Marca.nom%></td></tr>
+    <tr><td><b>Color</b></td><td><%= item.get('Vehicle').Color == null ? "" : item.get('Vehicle').Color.nom%></td></tr>
+    <tr><td><b>Àrea</b></td><td><%= item.get('Area').nom == null ? "" : item.get('Area').nom%></td></tr>
+    <tr><td><b>Import</b></td><td><%= item.get('import')%></td></tr>
+    <tr><td><b>Data Inici</b></td><td><%= new Date(item.get('dataInici')).toISOString().split('T')[0] + " " + new Date(item.get('dataInici')).toISOString().split('T')[1].split('.')[0]%></td></tr>
+    <tr><td><b>Data Fi</b></td><td><%= new Date(item.get('dataFi')).toISOString().split('T')[0] + " " + new Date(item.get('dataFi')).toISOString().split('T')[1].split('.')[0]%></td></tr>
+
+    </tbody>
+</table>
