@@ -3,7 +3,6 @@ module.exports = function (app) {
     var express = require('express');
 
     var Users = require('../controllers/c_user')(app);
-    var Orders = require('../controllers/c_orders')(app);
     var Vehicles = require('../controllers/c_vehicles')(app);
     var Tiquets = require('../controllers/c_tiquets')(app);
 
@@ -20,7 +19,6 @@ module.exports = function (app) {
     // Check if user is logged in
     router.get('/self', util.isAuthenticated, Users.check);
     // Get all ordeers belonging to the signed in user
-    router.get('/self/orders', util.isAuthenticated, Orders.getOrders);
 
     router.get('/self/vehicles', util.isAuthenticated, Vehicles.getVehicles);
 

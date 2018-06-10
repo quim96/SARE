@@ -8,8 +8,6 @@ module.exports = function (app) {
 
     return {
         create: function (req, res) {
-            util.checkParams(req.body, ['nom']);
-
             db.sequelize.transaction(function (t) {
                 return dao.User.getById(req.session.userId, t)
                     .then(function (user) {

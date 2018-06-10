@@ -1,5 +1,6 @@
 var tl_revisor = require("raw-loader!../../../templates/revisor/tl_revisor.html");
 var Sancio = require('../../models/m_sancio');
+var Vehicle = require('../../models/m_vehicle');
 var VehicleCollection = require('../../collections/c_vehicles');
 var vehicleList;
 
@@ -26,11 +27,34 @@ var RevisorListView = Backbone.View.extend({
             data: {
                 matricula: model.$el.find('#matricula').val()
             }
-        }).then(function (vehicle) {
-            console.log(vehicle);
+        }).then(function (vehicleList) {
+            if(vehicleList.length == 0){
+                var dataVehicle = {
+                    matricula: model.$el.find('#matricula').val(),
+                };
+                var vehicle = new Vehicle();
+                vehicle.save(dataVehicle, {
+                    success: function (vehicle) {
+                        var data = {
+                            import: 100,
+                            VehicleId: vehicle.id,
+                            AreaId: 1,
+                            data: new Date()
+                        };
+                        var sancio = new Sancio();
+                        sancio.save(data, {
+                            success: function () {
+                                console.log('Sanció Posada')
+                            }
+                        });
+                    }
+
+                });
+            }
+            console.log(vehicleList);
             var data = {
                 import: 100,
-                VehicleId: vehicle.id,
+                VehicleId: vehicleList[0].id,
                 AreaId: 1,
                 data: new Date()
             };

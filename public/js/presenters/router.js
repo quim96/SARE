@@ -35,10 +35,6 @@ Router.init = function () {
             EventBus.trigger('ui:switch:signup')
         },
 
-        showOrders: function () {
-            EventBus.trigger('ui:switch:orders')
-        },
-
         showColors: function () {
             EventBus.trigger('ui:switch:colors')
         },

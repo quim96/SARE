@@ -91,23 +91,9 @@ app.db.init(app.get('env'))
     .then(function() {
         return app.db.User.create({username: 'usuari', password: bcrypt.hashSync('usuari'), email: 'user@jo.com', RolId: 2})
     })
-    .then(function(user) {
-        return app.db.Order.create({description: 'My first order'})
-            .then(function(order) {
-                return order.setUser(user)
-            })
-            .then(function() { return user; });
-    })
-    .then(function(user) {
-        return app.db.Order.create({description: 'My second order'})
-            .then(function(order) {
-                return order.setUser(user)
-            })
-    })
     .then(function () {
         app.use('/api/users', require('./routers/r_users')(app));
         app.use('/api/revisor', require('./routers/r_revisor')(app));
-        app.use('/api/orders', require('./routers/r_orders')(app));
         app.use('/api/colors', require('./routers/r_colors')(app));
         app.use('/api/arees', require('./routers/r_arees')(app));
         app.use('/api/tiquets', require('./routers/r_tiquets')(app));
