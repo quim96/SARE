@@ -150,13 +150,14 @@ Ui.switchContent = function (widget) {
         case 'estacionament': {
             localStorage.setItem('last', 'estacionament');
             if (localStorage.hasItem('user')) {
-                $.when(vehicleList.fetch(), marcaList.fetch(), areaList.fetch()).then(function () {
+                $.when(tiquetsUsuariList.fetch({data: {dataFi: new Date()}}), vehicleList.fetch(), marcaList.fetch(), areaList.fetch()).then(function () {
                     lastContent = new EstacionamentView({
                         el: $content, eventBus: EventBus, collection: {
                             vehicles: vehicleList,
                             colors: colorList,
                             marcas: marcaList,
-                            arees: areaList
+                            arees: areaList,
+                            tiquetsUsuari: tiquetsUsuariList
                         }
                     }).render();
                 });

@@ -1,6 +1,7 @@
 var tl_tiquet = require("raw-loader!../../../templates/estacionament/tl_estacionament.html");
 
 var Vehicle = require('../../models/m_vehicle');
+var Tiquet = require('../../models/m_tiquet');
 var VehicleItemView = require('./v_vehicleItem');
 
 var AreaItemView = require('./v_areaItem');
@@ -12,6 +13,8 @@ var $tableArea;
 var idVehicle;
 var idArea;
 var temps;
+var minuts;
+var preu;
 
 var TiquetListView = Backbone.View.extend({
     initialize: function(params) {
@@ -33,6 +36,7 @@ var TiquetListView = Backbone.View.extend({
         'click #pagar': 'showPagament',
         'click #cancelar': 'cancelar',
         'click #btnCrear': 'crearEditar',
+        'click #finalitzar': 'finalitzar',
         'change #colors' : 'updateColor'
     },
 
@@ -40,6 +44,9 @@ var TiquetListView = Backbone.View.extend({
 
         this.$el.html(this.template());
 
+        if(this.collection.tiquetsUsuari.length > 0) {
+            this.$el.find('#estacionamentAlert').removeClass('hidden');
+        }
 
         this.eventBus.trigger('tab:change', 'estacionament');
 
@@ -119,8 +126,10 @@ var TiquetListView = Backbone.View.extend({
         this.$el.find('#step4').addClass('active');
 
         this.$el.find('.step').addClass('hidden');
-
+        minuts = Number(this.$el.find('.clockpicker-span-minuts').text());
+        preu = minuts * this.collection.arees.get(idArea).get('preuMinut');
         $pagament.removeClass('hidden');
+        this.$el.find('#import').text(preu.toFixed(2));
 
     },
     cancelar: function() {
@@ -188,6 +197,22 @@ var TiquetListView = Backbone.View.extend({
         this.collection.vehicles.add(item);
         this.render();
     },
+
+    finalitzar: function () {
+        console.log( minuts + " " + preu);
+        var data = {
+            import: preu,
+            VehicleId: idVehicle,
+            AreaId: idArea
+        };
+        var tiquet = new Tiquet();
+        tiquet.save(data, {
+            success: function(tiquet) {
+                console.log('Guardat');
+            }
+        });
+
+    }
 
 });
 

@@ -8,10 +8,9 @@
 </div>
 <div class="navbar-collapse collapse">
     <ul class="nav navbar-nav">
-        <li id="nav_home"><a href="#">Home</a></li>
         <% if (user && user.username && user.rol === 1) { %>
-        <li id="nav_color"><a href="#colors" >Colors</a></li>
         <li id="nav_area"><a href="#arees" >Àrees</a></li>
+        <li id="nav_color"><a href="#colors" >Colors</a></li>
         <li id="nav_marca"><a href="#marques" >Marques</a></li>
         <li id="nav_sancio"><a href="#sancions" >Sancions</a></li>
         <li class="dropdown" id="nav_tiquets">

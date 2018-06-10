@@ -113,7 +113,17 @@ module.exports = function (app, dao) {
     };
 
     Tiquet.create = function (tiquet_data, user, t) {
-        return db.Tiquet.create(tiquet_data, util.addTrans(t, {}))
+        var result = db.Area.find(util.addTrans(t, {where: {id: tiquet_data.AreaId}}))
+            .then(function(area) {
+                var minuts = tiquet_data.import / area.preuMinut;
+                if (minuts > area.maxMinuts){
+                    minuts = area.maxMinuts;
+                }
+                tiquet_data.dataInici = new Date();
+                tiquet_data.dataFi = new Date(tiquet_data.dataInici.getTime() + minuts * 60000);
+                return db.Tiquet.create(tiquet_data, util.addTrans(t, {}));
+            });
+        return result;
     };
     Tiquet.update = function (tiquet_data, user, t) {
         return db.Tiquet.update(tiquet_data, { where: {id: tiquet_data.id} }, util.addTrans(t, {}))

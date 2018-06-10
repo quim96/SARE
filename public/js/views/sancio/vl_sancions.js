@@ -1,28 +1,27 @@
 var tl_sancio = require("raw-loader!../../../templates/sancio/tl_sancio.html");
 var Sancio = require('../../models/m_sancio')
 var SancioItemView = require('./v_sancioItem');
-var sancioEdit;
 var SancioListView = Backbone.View.extend({
     initialize: function(params) {
         this.eventBus = params.eventBus;
         this.template = _.template(tl_sancio);
 
         this.localEventBus = _.extend({}, Backbone.Events);
-
-        this.localEventBus.on('view:sancio:edit', this.showEdit.bind(this));
-        this.localEventBus.on('view:sancio:delete', this.showDelete.bind(this));
     },
 
     events: {
-        'click .crear' : 'showCreate',
         'click .enviar' : 'save',
         'keyup .cercar' : 'cercar',
-        'click #btnEsborrar' : 'delete'
+        'click #find' : 'cercarDates'
     },
     render: function() {
         this.eventBus.trigger('tab:change', 'sancio');
         this.$el.html(this.template({sancios: this.collection}));
-
+        this.collection.each(function(item) {
+            var data = item.get("data").split('T');
+            var dataCurta = data[0].split('-');
+            item.set("data", dataCurta[2] + '/' + dataCurta[1] + '/' + dataCurta[0] + ' ' + data[1].split('.')[0]);
+        });
         this.carregarTaula();
         return this;
     },
@@ -35,10 +34,25 @@ var SancioListView = Backbone.View.extend({
             $table.append(new SancioItemView({model: item, eventBus: localEventBus}).render().el);
         });
     },
+    cercarDates: function() {
+        console.log(new Date(this.$el.find('#dataInici').val()));
+        $.when(this.collection.fetch(
+            {
+                data: {
+                    dataInici: new Date(this.$el.find('#dataInici').val()),
+                    dataFi: new Date(this.$el.find('#dataFi').val())
+                }
+            })).then(function () {
+            console.log(this.collection)
+        });
+    },
     cercar: function() {
         var localEventBus = this.localEventBus;
         var src_id = this.$el.find('#txt_id').val();
         var src_nom = this.$el.find('#txt_nom').val();
+        var src_marca = this.$el.find('#txt_marca').val();
+        var src_area = this.$el.find('#txt_area').val();
+        var src_data = this.$el.find('#txt_data').val();
 
         var itemCerca = [];
         var aux = this.collection;
@@ -59,8 +73,32 @@ var SancioListView = Backbone.View.extend({
                 }
             });
         }
+        if (src_marca != "" ) {
+            itemCerca = [];
+            aux.forEach(function (item) {
+                if (src_marca != "" && item.get("Vehicle").Marca.nom.toString().toLowerCase().includes(src_marca.toLowerCase())) {
+                    itemCerca.push(item);
+                }
+            });
+        }
+        if (src_area != "" ) {
+            itemCerca = [];
+            aux.forEach(function (item) {
+                if (src_area != "" && item.get("Area").nom.toString().toLowerCase().includes(src_area.toLowerCase())) {
+                    itemCerca.push(item);
+                }
+            });
+        }
+        if (src_data != "" ) {
+            itemCerca = [];
+            aux.forEach(function (item) {
+                if (src_data != "" && item.get("data").toString().toLowerCase().includes(src_data.toLowerCase())) {
+                    itemCerca.push(item);
+                }
+            });
+        }
 
-        if (src_id == "" && src_nom == "") {
+        if (src_id == "" && src_nom == "" && src_marca == "" && src_area == "" && src_data == "") {
             this.carregarTaula();
         } else {
             this.$el.find('.trCont').remove();
@@ -69,69 +107,7 @@ var SancioListView = Backbone.View.extend({
                 $table.append(new SancioItemView({model: item, eventBus: localEventBus}).render().el);
             });
         }
-    },
-    showCreate: function() {
-        this.$el.find('.titolPag').text("Crear Sancio");
-        this.$el.find('#nom').val('');
-        this.showCreEdi();
-    },
-    showCreEdi(){
-        this.$el.find('#popupCrearEditar').modal();
-    },
-    save: function() {
-        if (sancioEdit == null) {
-            var data = {
-                nom: this.$el.find('#nom').val()
-            };
-            var sancio = new Sancio();
-            var model = this;
-            sancio.save(data, {
-                success: function(sancio) {
-                    model.add(sancio);
-                }
-            });
-        } else {
-            sancioEdit.set('nom', this.$el.find('#nom').val());
-            var model = this;
-            sancioEdit.save().then(function (sancio) {
-                model.$el.find('#popupCrearEditar').modal('hide');
-                model.render();
-            });
-        }
-
-    },
-    add: function(item) {
-        this.collection.add(item);
-        this.$el.find('#popupCrearEditar').modal('hide');
-        this.render();
-    },
-    showEdit: function(id) {
-        sancioEdit =  this.collection.get(id);
-        this.$el.find('.titolPag').text("Editar sancio " + sancioEdit.get("id"));
-        this.showCreEdi();
-        this.$el.find('#nom').val(sancioEdit.get('nom'));
-    },
-    showDelete: function(id) {
-        sancioEdit =  this.collection.get(id);
-        this.$el.find('#esborrarCol').text(sancioEdit.get('nom'));
-        this.$el.find('#popup').modal();
-    },
-    delete: function () {
-        var model = this;
-        sancioEdit.destroy({
-            success: function(removed, data) {
-                model.$el.find('#popup').modal('hide');
-                model.render();
-            },
-            error: function(aborted, response) {
-                model.$el.find('#popup').modal('hide');
-                this.render();
-            }
-        });
     }
-
-
-
 
 });
 

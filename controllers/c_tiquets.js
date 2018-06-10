@@ -8,7 +8,7 @@ module.exports = function (app) {
 
     return {
         create: function (req, res) {
-            util.checkParams(req.body, ['nom']);
+            util.checkParams(req.body, ['import', 'VehicleId', 'AreaId']);
 
             db.sequelize.transaction(function (t) {
                 return dao.User.getById(req.session.userId, t)

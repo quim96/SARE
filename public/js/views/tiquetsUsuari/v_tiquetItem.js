@@ -16,11 +16,10 @@ var TiquetItemView = Backbone.View.extend({
         return this
     },
     actualitzar: function () {
-        console.log('Actualitzo');
         var dada  = (new Date(this.model.get('dataFi')).getTime() - new Date().getTime())/1000;
         if (dada > 60) {
             this.$el.find('#seg').text(("0" + (dada%60).toFixed(0)).slice(-2));
-            var min = dada/60;
+            var min = Math.floor(dada/60);
             if (min > 60) {
                 this.$el.find('#min').text(("0" + Math.floor(min%60)).slice(-2));
                 this.$el.find('#hor').text(("0" + Math.floor(min/60)).slice(-2));

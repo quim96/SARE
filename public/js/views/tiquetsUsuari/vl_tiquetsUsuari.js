@@ -5,19 +5,15 @@ var TiquetListView = Backbone.View.extend({
     initialize: function(params) {
         this.eventBus = params.eventBus;
         this.template = _.template(tl_tiquet);
-        this.dada = (new Date(this.collection.models[0].get('dataFi')).getTime() - new Date().getTime())/1000;
         this.localEventBus = _.extend({}, Backbone.Events);
-
     },
 
     events: {
     },
     render: function() {
-        this.eventBus.trigger('tab:change', 'tiquet');
-        aux = this.collection;
-
+        this.eventBus.trigger('tab:change', 'homeUsuari');
         this.$el.html(this.template({tiquets: this.collection, dada: this.dada}));
-        $list = this.$el.find('.cont')
+        $list = this.$el.find('.cont');
         this.collection.each( function(item) {
             $list.append(new TiquetItemView({model: item}).render().el)
         });

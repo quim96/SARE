@@ -1,10 +1,10 @@
 <div>
     <div class="contingut">
         <div class="row">
-            <div class="col-md-12">
-                    <div id="estacionamentAlert" class="alert alert-danger alert-dismissible">
+            <div class="col-md-12 height500">
+                    <div id="estacionamentAlert" class="hidden alert alert-danger alert-dismissible">
                         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        Tens tiquets <strong>Actius</strong>.
+                        Tens tiquets <a href="#homeUsuari"><strong>Actius</strong></a>.
                     </div>
                 <div class="roundBorder" id="estacionament">
                     <div class="row bs-wizard">
@@ -59,7 +59,8 @@
                         </div>
                         <button id="pagar" class="center-block mtop5 btn btn-default">Pagar</button>
                     </div>
-                    <div id="pagament" class="hidden step">
+                    <div id="pagament" class="hidden step text-center">
+                        <span>Import a Pagar: <b id="import"></b>€</span>
                         <button id="finalitzar" class="center-block mtop5 btn btn-default">Pagar</button>
                     </div>
                     <div id="crearEditarVehicle" class="step estacionament hidden">

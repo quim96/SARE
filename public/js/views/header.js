@@ -54,6 +54,8 @@ var Header = Backbone.View.extend({
             this.$el.find('#nav_marca').addClass('active');
         } else if (item === "sancio") {
             this.$el.find('#nav_sancio').addClass('active');
+        }  else if (item === "homeUsuari") {
+            this.$el.find('#homeUsuari').addClass('active');
         }
 
     },

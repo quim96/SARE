@@ -11,8 +11,8 @@
     <tr><td><b>Color</b></td><td><%= item.get('Vehicle').Color == null ? "" : item.get('Vehicle').Color.nom%></td></tr>
     <tr><td><b>Àrea</b></td><td><%= item.get('Area').nom == null ? "" : item.get('Area').nom%></td></tr>
     <tr><td><b>Import</b></td><td><%= item.get('import')%></td></tr>
-    <tr><td><b>Data Inici</b></td><td><%= item.get('dataInici')%></td></tr>
-    <tr><td><b>Data Fi</b></td><td><%= item.get('dataFi')%></td></tr>
+    <tr><td><b>Data Inici</b></td><td><%= new Date(item.get('dataInici')).toISOString().split('T')[0] + " " + new Date(item.get('dataInici')).toISOString().split('T')[1].split('.')[0]%></td></tr>
+    <tr><td><b>Data Fi</b></td><td><%= new Date(item.get('dataFi')).toISOString().split('T')[0] + " " + new Date(item.get('dataFi')).toISOString().split('T')[1].split('.')[0]%></td></tr>
 
     </tbody>
 </table>

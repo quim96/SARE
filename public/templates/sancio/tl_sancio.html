@@ -2,6 +2,11 @@
     <div class="contingut">
         <div class="row">
             <h2 class="titolPag">Sancions</h2>
+            <div class="clear"></div>
+            <div class="cercador">
+                <span>Data Inici: </span><input id="dataInici" type="date"></input><span> Data Fi: </span><input id="dataFi" type="date"></input>
+                <button class="btn btn-default" id="find">Cercar</button>
+            </div>
             <a class="contingut createEdit crear fa fa-plus" title="Crear"></a>
             <div class="clear espai"></div>
             <div class="col-md-12">
@@ -23,7 +28,15 @@
                             <td>
                                 <input id="txt_nom" placeholder="Nom" class="cercar form-control" type="text"/>
                             </td>
-                            <td></td>
+                            <td>
+                                <input id="txt_marca" placeholder="Marca" class="cercar form-control" type="text"/>
+                            </td>
+                            <td>
+                                <input id="txt_area" placeholder="Àrea" class="cercar form-control" type="text"/>
+                            </td>
+                            <td>
+                                <input id="txt_data" placeholder="Data" class="cercar form-control" type="datetime-local"/>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
