@@ -59,7 +59,7 @@ var VehicleListView = Backbone.View.extend({
         if (src_marca != "" ) {
             itemCerca = [];
             aux.forEach(function (item) {
-                if (src_marca != "" && item.get("Marca").nom.toString().toLowerCase().includes(src_marca.toLowerCase())) {
+                if (src_marca != "" && item.get("Marca")!= null && item.get("Marca").nom.toString().toLowerCase().includes(src_marca.toLowerCase())) {
                     itemCerca.push(item);
                 }
             });
@@ -67,7 +67,7 @@ var VehicleListView = Backbone.View.extend({
         if (src_color != "" ) {
             itemCerca = [];
             aux.forEach(function (item) {
-                if (src_color != "" && item.get("Color").nom.toString().toLowerCase().includes(src_color.toLowerCase())) {
+                if (src_color != "" && item.get("Color") != null && item.get("Color").nom.toString().toLowerCase().includes(src_color.toLowerCase())) {
                     itemCerca.push(item);
                 }
             });

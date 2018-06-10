@@ -3,7 +3,7 @@ var Sancio = require('../../models/m_sancio');
 var Vehicle = require('../../models/m_vehicle');
 var VehicleCollection = require('../../collections/c_vehicles');
 var vehicleList;
-
+var zonaIncorrecte = false;
 var RevisorListView = Backbone.View.extend({
     initialize: function(params) {
         this.eventBus = params.eventBus;
@@ -11,18 +11,34 @@ var RevisorListView = Backbone.View.extend({
 
         this.localEventBus = _.extend({}, Backbone.Events);
         vehicleList = new VehicleCollection({eventBus: this.localEventBus});
+        this.eventBus.trigger('tab:change', 'revisor');
+
     },
 
     events: {
         'click #consultar': 'consultar',
-        'click #sancio': 'sancionar'
+        'click #sancio': 'sancionarTiquet',
+        'click #sancioZonaEquivocada': 'sancionarIncorrecte'
     },
     render: function() {
         this.$el.html(this.template({revisors: this.collection}));
         return this;
     },
+    sancionarIncorrecte: function() {
+        zonaIncorrecte = true;
+        this.sancionar();
+    },
+    sancionarTiquet: function() {
+        zonaIncorrecte = false;
+        this.sancionar();
+    },
     sancionar: function() {
-
+        var importSancio;
+        if (zonaIncorrecte)
+            importSancio = 3;
+        else
+            importSancio = 5.5;
+        model = this;
         vehicleList.fetch({
             data: {
                 matricula: model.$el.find('#matricula').val()
@@ -36,7 +52,7 @@ var RevisorListView = Backbone.View.extend({
                 vehicle.save(dataVehicle, {
                     success: function (vehicle) {
                         var data = {
-                            import: 100,
+                            import: importSancio,
                             VehicleId: vehicle.id,
                             AreaId: 1,
                             data: new Date()
@@ -44,16 +60,18 @@ var RevisorListView = Backbone.View.extend({
                         var sancio = new Sancio();
                         sancio.save(data, {
                             success: function () {
-                                console.log('Sanció Posada')
+                                model.$el.find('#matricula').val('');
+                                model.$el.find('#mat').text('');
+                                model.$el.find('#resultat').text('');
+                                model.$el.find('#sancio').removeClass('hidden');
                             }
                         });
                     }
 
                 });
             }
-            console.log(vehicleList);
             var data = {
-                import: 100,
+                import: importSancio,
                 VehicleId: vehicleList[0].id,
                 AreaId: 1,
                 data: new Date()
@@ -61,7 +79,10 @@ var RevisorListView = Backbone.View.extend({
             var sancio = new Sancio();
             sancio.save(data, {
                 success: function () {
-                    console.log('Sanció Posada')
+                    model.$el.find('#matricula').val('');
+                    model.$el.find('#mat').text('');
+                    model.$el.find('#resultat').text('');
+                    model.$el.find('#sancio').removeClass('hidden');
                 }
 
             });
@@ -84,10 +105,16 @@ var RevisorListView = Backbone.View.extend({
         if(this.collection.length == 0) {
             this.$el.find('#resultat').text('No Té Tiquet Actiu');
             this.$el.find('#sancio').removeClass('hidden');
+            this.$el.find('#sancioZonaEquivocada').addClass('hidden');
 
         } else {
-            this.$el.find('#resultat').text('Té Tiquet Actiu');
-            this.$el.find('#sancio').removeClass('hidden');
+            tt = this.collection;
+            this.$el.find('#resultat').text('Té Tiquet Actiu (Zona ');
+            model = this;
+            this.collection.each(function (value) { model.$el.find('#resultat').text(model.$el.find('#resultat').text() + value.get('Area').nom) + ' '});
+            this.$el.find('#resultat').text(this.$el.find('#resultat').text() + ')');
+            this.$el.find('#sancio').addClass('hidden');
+            this.$el.find('#sancioZonaEquivocada').removeClass('hidden');
         }
     }
 

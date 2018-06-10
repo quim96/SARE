@@ -1,5 +1,6 @@
 <td><%= item.get('id')%></td>
-<td><%= item.get('Vehicle').matricula%></td>
-<td><%= item.get('Vehicle').Marca.nom%></td>
-<td><%= item.get('Area').nom%></td>
+<td><%= item.get('Vehicle') == null ? '' : item.get('Vehicle').matricula%></td>
+<td><%= item.get('import')%></td>
+<td><%= item.get('Vehicle').Marca == null ? '' : item.get('Vehicle').Marca.nom%></td>
+<td><%= item.get('Area')  == null ? '' : item.get('Area').nom%></td>
 <td><%= item.get('data')%></td>

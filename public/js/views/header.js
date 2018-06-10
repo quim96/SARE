@@ -59,7 +59,7 @@ var Header = Backbone.View.extend({
         }  else if (item === "vehicle") {
             this.$el.find('#nav_vehicles').addClass('active');
         }  else if (item === "revisor") {
-            this.$el.find('#revisor').addClass('active');
+            this.$el.find('#nav_revisor').addClass('active');
         }
 
     },

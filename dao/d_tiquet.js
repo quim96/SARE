@@ -92,7 +92,8 @@ module.exports = function (app, dao) {
                     where: {
                         matricula: matricula
                     }
-                }
+                },
+                { model: db.Area, attributes: ["nom"] }
             ],
             where: {
                 dataFi: {

@@ -35,18 +35,19 @@ var TiquetListView = Backbone.View.extend({
                     dataFi: new Date(this.$el.find('#dataFi').val())
                 }
             }).then(function (collection) {
+            this.collection.each(function (item) {
+                var data = item.get("dataInici").split('T');
+                var dataCurta = data[0].split('-');
+                item.set("dataInici", dataCurta[2] + '/' + dataCurta[1] + '/' + dataCurta[0] + ' ' + data[1].split('.')[0]);
+                data = item.get("dataFi").split('T');
+                dataCurta = data[0].split('-');
+                item.set("dataFi", dataCurta[2] + '/' + dataCurta[1] + '/' + dataCurta[0] + ' ' + data[1].split('.')[0]);
+            });
             model.carregarTaula();
         });
     },
     carregarTaula: function() {
-        this.collection.each(function (item) {
-            var data = item.get("dataInici").split('T');
-            var dataCurta = data[0].split('-');
-            item.set("dataInici", dataCurta[2] + '/' + dataCurta[1] + '/' + dataCurta[0] + ' ' + data[1].split('.')[0]);
-            data = item.get("dataFi").split('T');
-            dataCurta = data[0].split('-');
-            item.set("dataFi", dataCurta[2] + '/' + dataCurta[1] + '/' + dataCurta[0] + ' ' + data[1].split('.')[0]);
-        });
+
         this.$el.find('.trCont').remove();
         var localEventBus = this.localEventBus;
         $table = this.$el.find('#taula');
@@ -108,7 +109,7 @@ var TiquetListView = Backbone.View.extend({
         if (src_marca !== "" ) {
             itemCerca = [];
             aux.forEach(function (item) {
-                if (src_marca !== "" && item.get('Vehicle').Marca.nom.toString().toLowerCase().includes(src_marca.toLowerCase())) {
+                if (src_marca !== "" && item.get('Vehicle').Marca != null && item.get('Vehicle').Marca.nom.toString().toLowerCase().includes(src_marca.toLowerCase())) {
                     itemCerca.push(item);
                 }
             });
@@ -118,7 +119,7 @@ var TiquetListView = Backbone.View.extend({
         if (src_color !== "" ) {
             itemCerca = [];
             aux.forEach(function (item) {
-                if (src_color !== "" && item.get('Vehicle').Color.nom.toString().toLowerCase().includes(src_color.toLowerCase())) {
+                if (src_color !== "" && item.get('Vehicle') != null && item.get('Vehicle').Color != null && item.get('Vehicle').Color.nom.toString().toLowerCase().includes(src_color.toLowerCase())) {
                     itemCerca.push(item);
                 }
             });
@@ -128,7 +129,7 @@ var TiquetListView = Backbone.View.extend({
         if (src_area !== "" ) {
             itemCerca = [];
             aux.forEach(function (item) {
-                if (src_area !== "" && item.get('Area').nom.toString().toLowerCase().includes(src_area.toLowerCase())) {
+                if (src_area !== "" && item.get('Area') != null && item.get('Area').nom.toString().toLowerCase().includes(src_area.toLowerCase())) {
                     itemCerca.push(item);
                 }
             });

@@ -7,7 +7,6 @@
                 <span>Data Inici: </span><input id="dataInici" type="date"></input><span> Data Fi: </span><input id="dataFi" type="date"></input>
                 <button class="btn btn-default" id="find">Cercar</button>
             </div>
-            <a class="contingut createEdit crear fa fa-plus" title="Crear"></a>
             <div class="clear espai"></div>
             <div class="col-md-12">
                 <table id="taula" class="table table-striped table-bordered">
@@ -15,6 +14,7 @@
                         <tr>
                             <th scope="col">ID</td></th>
                             <th scope="col">Matricula</th>
+                            <th scope="col">Import</th>
                             <th scope="col">Marca</th>
                             <th scope="col">Àrea</th>
                             <th scope="col">Data</th>
@@ -26,7 +26,10 @@
                                 <input id="txt_id" placeholder="ID" class="cercar form-control" type="number"/>
                             </td>
                             <td>
-                                <input id="txt_nom" placeholder="Nom" class="cercar form-control" type="text"/>
+                                <input id="txt_nom" placeholder="Matrícula" class="cercar form-control" type="text"/>
+                            </td>
+                            <td>
+                                <input id="txt_import" placeholder="Import" class="cercar form-control" type="text"/>
                             </td>
                             <td>
                                 <input id="txt_marca" placeholder="Marca" class="cercar form-control" type="text"/>

@@ -208,7 +208,7 @@ Ui.switchContent = function (widget) {
                     data: {data: new Date()},
                     processData: true,
                     success: function () {
-                        lastContent = new RevisorView({el: $content, collection: tiquetsRevisorList}).render();
+                        lastContent = new RevisorView({el: $content, collection: tiquetsRevisorList, eventBus: EventBus}).render();
                     },
                     error: Ui.error
                 });

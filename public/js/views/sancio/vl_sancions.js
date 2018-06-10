@@ -17,16 +17,15 @@ var SancioListView = Backbone.View.extend({
     render: function() {
         this.eventBus.trigger('tab:change', 'sancio');
         this.$el.html(this.template({sancios: this.collection}));
-
-        this.carregarTaula();
-        return this;
-    },
-    carregarTaula: function() {
-        this.collection.each(function(item) {
+        this.collection.forEach(function(item) {
             var data = item.get("data").split('T');
             var dataCurta = data[0].split('-');
             item.set("data", dataCurta[2] + '/' + dataCurta[1] + '/' + dataCurta[0] + ' ' + data[1].split('.')[0]);
         });
+        this.carregarTaula();
+        return this;
+    },
+    carregarTaula: function() {
         this.$el.find('.trCont').remove();
         var localEventBus = this.localEventBus;
         $table = this.$el.find('#taula');
@@ -51,6 +50,7 @@ var SancioListView = Backbone.View.extend({
         var localEventBus = this.localEventBus;
         var src_id = this.$el.find('#txt_id').val();
         var src_nom = this.$el.find('#txt_nom').val();
+        var src_import = this.$el.find('#txt_import').val();
         var src_marca = this.$el.find('#txt_marca').val();
         var src_area = this.$el.find('#txt_area').val();
         var src_data = this.$el.find('#txt_data').val();
@@ -69,7 +69,15 @@ var SancioListView = Backbone.View.extend({
         if (src_nom != "" ) {
             itemCerca = [];
             aux.forEach(function (item) {
-                if (src_nom != "" && item.get("nom").toString().toLowerCase().includes(src_nom.toLowerCase())) {
+                if (src_nom != "" && item.get("Vehicle") != null && item.get("Vehicle").matricula.toString().toLowerCase().includes(src_nom.toLowerCase())) {
+                    itemCerca.push(item);
+                }
+            });
+        }
+        if (src_import != "" ) {
+            itemCerca = [];
+            aux.forEach(function (item) {
+                if (src_import != "" && item.get("import").toString().toLowerCase().includes(src_import.toLowerCase())) {
                     itemCerca.push(item);
                 }
             });
@@ -77,7 +85,7 @@ var SancioListView = Backbone.View.extend({
         if (src_marca != "" ) {
             itemCerca = [];
             aux.forEach(function (item) {
-                if (src_marca != "" && item.get("Vehicle").Marca.nom.toString().toLowerCase().includes(src_marca.toLowerCase())) {
+                if (src_marca != "" && item.get("Vehicle") != null && item.get("Vehicle").Marca != null && item.get("Vehicle").Marca.nom.toString().toLowerCase().includes(src_marca.toLowerCase())) {
                     itemCerca.push(item);
                 }
             });
@@ -85,7 +93,7 @@ var SancioListView = Backbone.View.extend({
         if (src_area != "" ) {
             itemCerca = [];
             aux.forEach(function (item) {
-                if (src_area != "" && item.get("Area").nom.toString().toLowerCase().includes(src_area.toLowerCase())) {
+                if (src_area != "" && item.get("Area") != null && item.get("Area").nom.toString().toLowerCase().includes(src_area.toLowerCase())) {
                     itemCerca.push(item);
                 }
             });
@@ -99,7 +107,7 @@ var SancioListView = Backbone.View.extend({
             });
         }
 
-        if (src_id == "" && src_nom == "" && src_marca == "" && src_area == "" && src_data == "") {
+        if (src_id == "" && src_nom == "" && src_import == "" && src_marca == "" && src_area == "" && src_data == "") {
             this.carregarTaula();
         } else {
             this.$el.find('.trCont').remove();
