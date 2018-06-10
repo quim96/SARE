@@ -84,7 +84,23 @@ module.exports = function (app, dao) {
             attributes:["import", "dataInici", "dataFi"]
         })
     };
-
+    Tiquet.getByMatricula = function (matricula, t) {
+        return db.Tiquet.findAll({
+            include: [
+                {
+                    model: db.Vehicle,
+                    where: {
+                        matricula: matricula
+                    }
+                }
+            ],
+            where: {
+                dataFi: {
+                    $gte: new Date()
+                }
+            }
+        })
+    };
     Tiquet.getUserTiquetsData = function (userId, dataFi, options, t) {
         var opt = options || {};
         if (dataFi) {

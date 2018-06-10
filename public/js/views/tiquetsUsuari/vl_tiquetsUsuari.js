@@ -14,6 +14,9 @@ var TiquetListView = Backbone.View.extend({
         this.eventBus.trigger('tab:change', 'homeUsuari');
         this.$el.html(this.template({tiquets: this.collection, dada: this.dada}));
         $list = this.$el.find('.cont');
+        if (this.collection.length == 0) {
+            this.$el.find('#capTiquet').removeClass('hidden');
+        }
         this.collection.each( function(item) {
             $list.append(new TiquetItemView({model: item}).render().el)
         });

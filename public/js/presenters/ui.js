@@ -8,6 +8,7 @@ var CollectionTiquetUser  = require("../collections/c_tiquetsUsuari");
 var CollectionVehicleUser = require("../collections/c_vehiclesUser");
 var CollectionVehicle = require("../collections/c_vehicles");
 var CollectionMarca = require("../collections/c_marcas");
+var CollectionRevisor = require("../collections/c_tiquetsRevisor");
 var CollectionSancio = require("../collections/c_sancions");
 var UserLogin = require("../views/user/v_login");
 var UserSignup = require("../views/user/v_signup");
@@ -19,6 +20,7 @@ var MarcaView = require("../views/marca/vl_marques");
 var VehicleView = require("../views/vehicle/vl_vehicles");
 var SancioView = require("../views/sancio/vl_sancions");
 var TiquetView = require("../views/tiquet/vl_tiquets");
+var RevisorView = require("../views/revisor/vl_revisors");
 var TiquetUserView = require("../views/tiquetsUsuari/vl_tiquetsUsuari");
 var EstacionamentView = require("../views/estacionament/vl_estacionament");
 
@@ -31,6 +33,7 @@ var areaList = new CollectionArea ({eventBus: EventBus});
 var tiquetList = new CollectionTiquet ({eventBus: EventBus});
 var sancioList = new CollectionSancio ({eventBus: EventBus});
 var tiquetsUsuariList = new CollectionTiquetUser ({eventBus: EventBus});
+var tiquetsRevisorList = new CollectionRevisor ({eventBus: EventBus});
 var vehicleListUser = new CollectionVehicleUser ({eventBus: EventBus});
 var vehicleList = new CollectionVehicle ({eventBus: EventBus});
 
@@ -214,6 +217,21 @@ Ui.switchContent = function (widget) {
                 Ui.switchContent('login');
             break;
         }
+        case 'revisor': {
+            localStorage.setItem('last', 'revisor');
+            if (localStorage.hasItem('user')) {
+                tiquetsRevisorList.fetch({
+                    data: {data: new Date()},
+                    processData: true,
+                    success: function () {
+                        lastContent = new RevisorView({el: $content, collection: tiquetsRevisorList}).render();
+                    },
+                    error: Ui.error
+                });
+            } else
+                Ui.switchContent('login');
+            break;
+        }
     }
 }
 
@@ -273,6 +291,7 @@ EventBus.on('ui:switch:estacionament', Ui.switchContent.bind(null, 'estacionamen
 EventBus.on('ui:switch:homeUsuari', Ui.switchContent.bind(null, 'homeUsuari'));
 EventBus.on('ui:switch:sancions', Ui.switchContent.bind(null, 'sancions'));
 EventBus.on('ui:switch:vehicles', Ui.switchContent.bind(null, 'vehicles'));
+EventBus.on('ui:switch:revisor', Ui.switchContent.bind(null, 'revisor'));
 
 
 module.exports = Ui;

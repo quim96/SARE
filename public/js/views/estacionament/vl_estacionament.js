@@ -199,16 +199,16 @@ var TiquetListView = Backbone.View.extend({
     },
 
     finalitzar: function () {
-        console.log( minuts + " " + preu);
         var data = {
             import: preu,
             VehicleId: idVehicle,
             AreaId: idArea
         };
         var tiquet = new Tiquet();
+        model = this;
         tiquet.save(data, {
             success: function(tiquet) {
-                console.log('Guardat');
+                model.eventBus.trigger('ui:switch:homeUsuari')
             }
         });
 

@@ -76,6 +76,9 @@ app.db.init(app.get('env'))
     .then(function() {
         return app.db.User.create({username: 'usuari', password: bcrypt.hashSync('usuari'), email: 'user@jo.com', RolId: 2})
     })
+    .then(function() {
+        return app.db.User.create({username: 'revisor', password: bcrypt.hashSync('revisor'), email: 'revisor@revisor.com', RolId: 2})
+    })
     .then(function() {return app.db.Vehicle.create({ matricula: '4432CGN', MarcaId: 1, UserId: 2})})
     .then(function() {return app.db.Tiquet.create({dataInici: new Date(), dataFi: '2018-04-23 22:15:00', import: 2.5, VehicleId: 1, AreaId: 1})})
     .then(function() {return app.db.Tiquet.create({dataInici: '2018-03-02 10:15', dataFi: '2018-05-22 11:15', import: 2.5, VehicleId: 1, AreaId: 1})})
@@ -103,6 +106,7 @@ app.db.init(app.get('env'))
     })
     .then(function () {
         app.use('/api/users', require('./routers/r_users')(app));
+        app.use('/api/revisor', require('./routers/r_revisor')(app));
         app.use('/api/orders', require('./routers/r_orders')(app));
         app.use('/api/colors', require('./routers/r_colors')(app));
         app.use('/api/arees', require('./routers/r_arees')(app));

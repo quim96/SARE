@@ -21,6 +21,7 @@ Router.init = function () {
             'marques': 'showMarques',
             'sancions': 'showSancions',
             'vehicles': 'showVehicles',
+            'revisor': 'showRevisor',
 
             // Default
             '*actions': 'defaultAction'
@@ -69,6 +70,9 @@ Router.init = function () {
         },
         showVehicles: function () {
             EventBus.trigger('ui:switch:vehicles')
+        },
+        showRevisor: function () {
+            EventBus.trigger('ui:switch:revisor')
         }
 
     });
