@@ -49,10 +49,17 @@ module.exports = function (app) {
                 .done();
         },
         getAll: function (req, res) {
-            dao.Vehicle.getAllVehicles()
-                .then(util.jsonResponse.bind(util, res))
-                .catch(util.sendError.bind(util, res, 400, util.Error.ERR_BAD_REQUEST))
-                .done();
+            if(util.containsParam(req.query, ['matricula'])){
+                dao.Vehicle.getByMatricula(req.query.matricula)
+                    .then(util.jsonResponse.bind(util, res))
+                    .catch(util.sendError.bind(util, res, 400, util.Error.ERR_BAD_REQUEST))
+                    .done();
+            } else {
+                dao.Vehicle.getAllVehicles()
+                    .then(util.jsonResponse.bind(util, res))
+                    .catch(util.sendError.bind(util, res, 400, util.Error.ERR_BAD_REQUEST))
+                    .done();
+            }
         },
         getById: function (req, res) {
             util.checkParams(req.params, ['id']);

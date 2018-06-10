@@ -113,7 +113,7 @@ app.db.init(app.get('env'))
         app.use('/api/tiquets', require('./routers/r_tiquets')(app));
         app.use('/api/vehicles', require('./routers/r_vehicles')(app));
         app.use('/api/marcas', require('./routers/r_marcas')(app));
-        app.use('/api/sancions', require('./routers/r_sancios')(app));
+        app.use('/api/sancio', require('./routers/r_sancios')(app));
 
         app.use(function (err, req, res, next) {
             var code = err.code || 500;

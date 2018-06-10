@@ -25,6 +25,15 @@ module.exports = function (app, dao) {
         });
     };
 
+    Vehicle.getByMatricula = function (matricula) {
+        console.log(matricula);
+        return db.Vehicle.findAll({
+            where: {
+                matricula: matricula
+            }
+        });
+    };
+
     Vehicle.create = function (vehicle_data, user, t) {
         return db.Vehicle.create(vehicle_data, util.addTrans(t, {}))
             .then(function(vehicle) {

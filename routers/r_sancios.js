@@ -9,7 +9,7 @@ module.exports = function(app) {
     var router = express.Router();
 
     router.get('/', util.isAdmin, Sancions.getAll);
-    router.post('/', util.isAdmin, Sancions.create);
+    router.post('/', util.isRevisor, Sancions.create);
 
     return router
 }
