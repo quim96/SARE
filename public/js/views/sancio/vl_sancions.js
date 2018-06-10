@@ -17,15 +17,16 @@ var SancioListView = Backbone.View.extend({
     render: function() {
         this.eventBus.trigger('tab:change', 'sancio');
         this.$el.html(this.template({sancios: this.collection}));
+
+        this.carregarTaula();
+        return this;
+    },
+    carregarTaula: function() {
         this.collection.each(function(item) {
             var data = item.get("data").split('T');
             var dataCurta = data[0].split('-');
             item.set("data", dataCurta[2] + '/' + dataCurta[1] + '/' + dataCurta[0] + ' ' + data[1].split('.')[0]);
         });
-        this.carregarTaula();
-        return this;
-    },
-    carregarTaula: function() {
         this.$el.find('.trCont').remove();
         var localEventBus = this.localEventBus;
         $table = this.$el.find('#taula');
@@ -35,16 +36,16 @@ var SancioListView = Backbone.View.extend({
         });
     },
     cercarDates: function() {
-        console.log(new Date(this.$el.find('#dataInici').val()));
-        $.when(this.collection.fetch(
+        model = this;
+        this.collection.fetch(
             {
                 data: {
                     dataInici: new Date(this.$el.find('#dataInici').val()),
                     dataFi: new Date(this.$el.find('#dataFi').val())
                 }
-            })).then(function () {
-            console.log(this.collection)
-        });
+            }).then(function (collection) {
+                model.carregarTaula();
+            });
     },
     cercar: function() {
         var localEventBus = this.localEventBus;

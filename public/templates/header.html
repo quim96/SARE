@@ -18,9 +18,10 @@
             <ul class="dropdown-menu">
                 <li><a href="#tiquetsAct">Tiquets Actius</a></li>
                 <li><a href="#tiquetsDia">Resum diari</a></li>
-                <li><a href="#">Llistat</a></li>
+                <li><a href="#tiquetsHist">Històric</a></li>
             </ul>
         </li>
+        <li id="nav_vehicles"><a href="#vehicles" >Vehicles</a></li>
         <% } else if (user && user.username && user.rol === 2) { %>
         <li id="homeUsuari"><a href="#homeUsuari" >Tiquets Actius</a></li>
         <li id="estacionament"><a href="#estacionament" >Estacionament</a></li>
@@ -29,7 +30,7 @@
     </ul>
     <ul class="nav navbar-nav navbar-right">
         <% if (user && user.username) { %>
-        <li><a href='#profile'><%= user.username %></a></li>
+        <li><%= user.username %></li>
         <li><a style="cursor: pointer" title="Sortir" class='glyphicon glyphicon-log-out glywhite'></a></li>
         <% } %>
     </ul>

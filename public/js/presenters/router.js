@@ -15,10 +15,12 @@ Router.init = function () {
             'arees': 'showArees',
             'tiquetsDia': 'showTiquetsDia',
             'tiquetsAct': 'showTiquetsAct',
+            'tiquetsHist': 'showTiquetsHist',
             'estacionament': 'showEstacionament',
             'homeUsuari': 'showHomeUsuari',
             'marques': 'showMarques',
             'sancions': 'showSancions',
+            'vehicles': 'showVehicles',
 
             // Default
             '*actions': 'defaultAction'
@@ -61,6 +63,12 @@ Router.init = function () {
         },
         showSancions: function () {
             EventBus.trigger('ui:switch:sancions')
+        },
+        showTiquetsHist: function () {
+            EventBus.trigger('ui:switch:tiquetsHist')
+        },
+        showVehicles: function () {
+            EventBus.trigger('ui:switch:vehicles')
         }
 
     });

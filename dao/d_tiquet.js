@@ -18,10 +18,19 @@ module.exports = function (app, dao) {
     Tiquet.getByDataIniFi = function(dataIn, dataFi) {
         d1 = new Date(dataIn);
         d2 = new Date(dataFi);
-        return db.Tiquet.find({
+        return db.Tiquet.findAll({
+            include: [
+                { model: db.Vehicle, attributes:["matricula"], include: [{model: db.Marca, attributes:["nom"] }, {model: db.Color, attributes:["nom"] } ] },
+                { model: db.Area, attributes: ["nom"] }
+            ],
             where: {
-                data: {
-                    $between: [d1, d2]
+                $or: {
+                    dataInici: {
+                        $between: [d1, d2]
+                    },
+                    dataFi: {
+                        $between: [d1, d2]
+                    }
                 }
             }
         })

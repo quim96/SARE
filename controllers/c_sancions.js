@@ -48,7 +48,13 @@ module.exports = function (app) {
                 .done();
         },
         getAll: function (req, res) {
-            if(!util.containsParam(req.query, ['data'])) {
+            if(util.containsParam(req.query, ['dataInici', 'dataFi'])){
+                dao.Sancio.getByDataIniFi(req.query.dataInici, req.query.dataFi )
+                    .then(util.jsonResponse.bind(util, res))
+                    .catch(util.sendError.bind(util, res, 400, util.Error.ERR_BAD_REQUEST))
+                    .done();
+            }
+            else if(!util.containsParam(req.query, ['data'])) {
                 dao.Sancio.getAllSancios()
                     .then(util.jsonResponse.bind(util, res))
                     .catch(util.sendError.bind(util, res, 400, util.Error.ERR_BAD_REQUEST))

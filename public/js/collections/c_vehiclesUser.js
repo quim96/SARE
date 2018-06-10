@@ -8,7 +8,7 @@ var VehicleCollection = Backbone.Collection.extend({
             return model.get('matricula');
     },
     model: VehicleModel,
-    url: "/api/vehicles"
+    url: "/api/users/self/vehicles"
 });
 
 module.exports = VehicleCollection;

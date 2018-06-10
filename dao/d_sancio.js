@@ -34,6 +34,23 @@ module.exports = function (app, dao) {
         });
     };
 
+    Sancio.getByDataIniFi = function (dataIni, dataFi) {
+        var d1 = new Date(dataIni);
+        var d2 = new Date(dataFi);
+        return db.Sancio.findAll({
+            include: [
+                { model: db.Vehicle, attributes:["matricula"], include: [{model: db.Marca, attributes:["nom"] }, {model: db.Color, attributes:["nom"] } ] },
+                { model: db.Area, attributes: ["nom"] }
+            ],
+            where: {
+                data: {
+                    $between: [d1, d2]
+                }
+            }
+        });
+    };
+
+
     Sancio.create = function (sancio_data, user, t) {
         return db.Sancio.create(sancio_data, util.addTrans(t, {}))
     };

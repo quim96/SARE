@@ -5,6 +5,7 @@ var CollectionColor = require("../collections/c_colors");
 var CollectionArea = require("../collections/c_arees");
 var CollectionTiquet = require("../collections/c_tiquets");
 var CollectionTiquetUser  = require("../collections/c_tiquetsUsuari");
+var CollectionVehicleUser = require("../collections/c_vehiclesUser");
 var CollectionVehicle = require("../collections/c_vehicles");
 var CollectionMarca = require("../collections/c_marcas");
 var CollectionSancio = require("../collections/c_sancions");
@@ -15,6 +16,7 @@ var OrdersView = require("../views/order/vl_orders");
 var ColorView = require("../views/color/vl_colors");
 var AreaView = require("../views/area/vl_area");
 var MarcaView = require("../views/marca/vl_marques");
+var VehicleView = require("../views/vehicle/vl_vehicles");
 var SancioView = require("../views/sancio/vl_sancions");
 var TiquetView = require("../views/tiquet/vl_tiquets");
 var TiquetUserView = require("../views/tiquetsUsuari/vl_tiquetsUsuari");
@@ -29,6 +31,7 @@ var areaList = new CollectionArea ({eventBus: EventBus});
 var tiquetList = new CollectionTiquet ({eventBus: EventBus});
 var sancioList = new CollectionSancio ({eventBus: EventBus});
 var tiquetsUsuariList = new CollectionTiquetUser ({eventBus: EventBus});
+var vehicleListUser = new CollectionVehicleUser ({eventBus: EventBus});
 var vehicleList = new CollectionVehicle ({eventBus: EventBus});
 
 var $content = $('#content');
@@ -102,6 +105,19 @@ Ui.switchContent = function (widget) {
                 Ui.switchContent('login');
             break;
         }
+        case 'vehicles': {
+            localStorage.setItem('last', 'vehicles');
+            if (localStorage.hasItem('user')) {
+                vehicleList.fetch({
+                    success: function () {
+                        lastContent = new VehicleView({el: $content, eventBus: EventBus, collection: vehicleList}).render();
+                    },
+                    error: Ui.error
+                });
+            } else
+                Ui.switchContent('login');
+            break;
+        }
         case 'tiquetsDia': {
             localStorage.setItem('last', 'tiquetsDia');
             if (localStorage.hasItem('user')) {
@@ -132,6 +148,21 @@ Ui.switchContent = function (widget) {
                 Ui.switchContent('login');
             break;
         }
+        case 'tiquetsHist': {
+            localStorage.setItem('last', 'tiquetsHist');
+            if (localStorage.hasItem('user')) {
+                tiquetList.fetch({
+                    data: {data: new Date()},
+                    processData: true,
+                    success: function () {
+                        lastContent = new TiquetView({titol: 'Tiquets Històrics', historic: true, el: $content, eventBus: EventBus, collection: tiquetList}).render();
+                    },
+                    error: Ui.error
+                });
+            } else
+                Ui.switchContent('login');
+            break;
+        }
         case 'homeUsuari': {
             localStorage.setItem('last', 'homeUsuari');
             if (localStorage.hasItem('user')) {
@@ -150,10 +181,10 @@ Ui.switchContent = function (widget) {
         case 'estacionament': {
             localStorage.setItem('last', 'estacionament');
             if (localStorage.hasItem('user')) {
-                $.when(tiquetsUsuariList.fetch({data: {dataFi: new Date()}}), vehicleList.fetch(), marcaList.fetch(), areaList.fetch()).then(function () {
+                $.when(tiquetsUsuariList.fetch({data: {dataFi: new Date()}}), vehicleListUser.fetch(), marcaList.fetch(), areaList.fetch()).then(function () {
                     lastContent = new EstacionamentView({
                         el: $content, eventBus: EventBus, collection: {
-                            vehicles: vehicleList,
+                            vehicles: vehicleListUser,
                             colors: colorList,
                             marcas: marcaList,
                             arees: areaList,
@@ -237,9 +268,11 @@ EventBus.on('ui:switch:marques', Ui.switchContent.bind(null, 'marques'));
 EventBus.on('ui:switch:arees', Ui.switchContent.bind(null, 'arees'));
 EventBus.on('ui:switch:tiquetsDia', Ui.switchContent.bind(null, 'tiquetsDia'));
 EventBus.on('ui:switch:tiquetsAct', Ui.switchContent.bind(null, 'tiquetsAct'));
+EventBus.on('ui:switch:tiquetsHist', Ui.switchContent.bind(null, 'tiquetsHist'));
 EventBus.on('ui:switch:estacionament', Ui.switchContent.bind(null, 'estacionament'));
 EventBus.on('ui:switch:homeUsuari', Ui.switchContent.bind(null, 'homeUsuari'));
 EventBus.on('ui:switch:sancions', Ui.switchContent.bind(null, 'sancions'));
+EventBus.on('ui:switch:vehicles', Ui.switchContent.bind(null, 'vehicles'));
 
 
 module.exports = Ui;

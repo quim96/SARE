@@ -17,6 +17,10 @@ module.exports = function (app, dao) {
     };
     Vehicle.getAllVehicles = function () {
         return db.Vehicle.findAll({
+            include: [
+                { model: db.Marca, attributes: ["nom"] },
+                { model: db.Color, attributes: ["nom"] }
+            ],
             order: [['nom', 'ASC']]
         });
     };
