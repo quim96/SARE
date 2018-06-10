@@ -1,16 +1,16 @@
-var tl_color = require("raw-loader!../../../templates/color/tl_color.html");
-var Color = require('../../models/m_color')
-var ColorItemView = require('./v_colorItem');
-var colorEdit;
-var ColorListView = Backbone.View.extend({
+var tl_sancio = require("raw-loader!../../../templates/sancio/tl_sancio.html");
+var Sancio = require('../../models/m_sancio')
+var SancioItemView = require('./v_sancioItem');
+var sancioEdit;
+var SancioListView = Backbone.View.extend({
     initialize: function(params) {
         this.eventBus = params.eventBus;
-        this.template = _.template(tl_color);
+        this.template = _.template(tl_sancio);
 
         this.localEventBus = _.extend({}, Backbone.Events);
 
-        this.localEventBus.on('view:color:edit', this.showEdit.bind(this));
-        this.localEventBus.on('view:color:delete', this.showDelete.bind(this));
+        this.localEventBus.on('view:sancio:edit', this.showEdit.bind(this));
+        this.localEventBus.on('view:sancio:delete', this.showDelete.bind(this));
     },
 
     events: {
@@ -20,8 +20,8 @@ var ColorListView = Backbone.View.extend({
         'click #btnEsborrar' : 'delete'
     },
     render: function() {
-        this.eventBus.trigger('tab:change', 'color');
-        this.$el.html(this.template({colors: this.collection}));
+        this.eventBus.trigger('tab:change', 'sancio');
+        this.$el.html(this.template({sancios: this.collection}));
 
         this.carregarTaula();
         return this;
@@ -32,7 +32,7 @@ var ColorListView = Backbone.View.extend({
         $table = this.$el.find('#taula');
 
         this.collection.each(function(item) {
-            $table.append(new ColorItemView({model: item, eventBus: localEventBus}).render().el);
+            $table.append(new SancioItemView({model: item, eventBus: localEventBus}).render().el);
         });
     },
     cercar: function() {
@@ -66,12 +66,12 @@ var ColorListView = Backbone.View.extend({
             this.$el.find('.trCont').remove();
             $table = this.$el.find('#taula');
             itemCerca.forEach(function (item) {
-                $table.append(new ColorItemView({model: item, eventBus: localEventBus}).render().el);
+                $table.append(new SancioItemView({model: item, eventBus: localEventBus}).render().el);
             });
         }
     },
     showCreate: function() {
-        this.$el.find('.titolPag').text("Crear Color");
+        this.$el.find('.titolPag').text("Crear Sancio");
         this.$el.find('#nom').val('');
         this.showCreEdi();
     },
@@ -79,21 +79,21 @@ var ColorListView = Backbone.View.extend({
         this.$el.find('#popupCrearEditar').modal();
     },
     save: function() {
-        if (colorEdit == null) {
+        if (sancioEdit == null) {
             var data = {
                 nom: this.$el.find('#nom').val()
             };
-            var color = new Color();
+            var sancio = new Sancio();
             var model = this;
-            color.save(data, {
-                success: function(color) {
-                    model.add(color);
+            sancio.save(data, {
+                success: function(sancio) {
+                    model.add(sancio);
                 }
             });
         } else {
-            colorEdit.set('nom', this.$el.find('#nom').val());
+            sancioEdit.set('nom', this.$el.find('#nom').val());
             var model = this;
-            colorEdit.save().then(function (color) {
+            sancioEdit.save().then(function (sancio) {
                 model.$el.find('#popupCrearEditar').modal('hide');
                 model.render();
             });
@@ -106,19 +106,19 @@ var ColorListView = Backbone.View.extend({
         this.render();
     },
     showEdit: function(id) {
-        colorEdit =  this.collection.get(id);
-        this.$el.find('.titolPag').text("Editar color " + colorEdit.get("id"));
+        sancioEdit =  this.collection.get(id);
+        this.$el.find('.titolPag').text("Editar sancio " + sancioEdit.get("id"));
         this.showCreEdi();
-        this.$el.find('#nom').val(colorEdit.get('nom'));
+        this.$el.find('#nom').val(sancioEdit.get('nom'));
     },
     showDelete: function(id) {
-        colorEdit =  this.collection.get(id);
-        this.$el.find('#esborrarCol').text(colorEdit.get('nom'));
+        sancioEdit =  this.collection.get(id);
+        this.$el.find('#esborrarCol').text(sancioEdit.get('nom'));
         this.$el.find('#popup').modal();
     },
     delete: function () {
         var model = this;
-        colorEdit.destroy({
+        sancioEdit.destroy({
             success: function(removed, data) {
                 model.$el.find('#popup').modal('hide');
                 model.render();
@@ -135,4 +135,4 @@ var ColorListView = Backbone.View.extend({
 
 });
 
-module.exports = ColorListView;
+module.exports = SancioListView;

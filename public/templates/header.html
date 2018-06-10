@@ -12,6 +12,8 @@
         <% if (user && user.username && user.rol === 1) { %>
         <li id="nav_color"><a href="#colors" >Colors</a></li>
         <li id="nav_area"><a href="#arees" >Àrees</a></li>
+        <li id="nav_marca"><a href="#marques" >Marques</a></li>
+        <li id="nav_sancio"><a href="#sancions" >Sancions</a></li>
         <li class="dropdown" id="nav_tiquets">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Tiquets <span class="caret"></span></a>
             <ul class="dropdown-menu">
@@ -21,6 +23,7 @@
             </ul>
         </li>
         <% } else if (user && user.username && user.rol === 2) { %>
+        <li id="homeUsuari"><a href="#homeUsuari" >Tiquets Actius</a></li>
         <li id="estacionament"><a href="#estacionament" >Estacionament</a></li>
         <li id="historic"><a href="#estacionament" >Històric</a></li>
         <%}%>

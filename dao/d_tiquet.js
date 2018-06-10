@@ -20,13 +20,8 @@ module.exports = function (app, dao) {
         d2 = new Date(dataFi);
         return db.Tiquet.find({
             where: {
-                $or: {
-                    dataInici: {
-                        $between: [d1, d2]
-                    },
-                    dataFi: {
-                        $between: [d1, d2]
-                    }
+                data: {
+                    $between: [d1, d2]
                 }
             }
         })
@@ -68,6 +63,53 @@ module.exports = function (app, dao) {
         return db.Tiquet.findAll({
             order: [['dataInici', 'ASC']]
         });
+    };
+
+    Tiquet.getUserTiquets = function (userId, options, t) {
+        var opt = options || {};
+        return db.Tiquet.findAll({
+            include: [
+                { model: db.Vehicle, attributes:["matricula"], where: {UserId: userId}, include: [{model: db.Marca, attributes:["nom"] }, {model: db.Color, attributes:["nom"] } ] },
+                { model: db.Area, attributes: ["nom"] }
+            ],
+            attributes:["import", "dataInici", "dataFi"]
+        })
+    };
+
+    Tiquet.getUserTiquetsData = function (userId, dataFi, options, t) {
+        var opt = options || {};
+        if (dataFi) {
+            return db.Tiquet.findAll({
+                include: [
+                    {
+                        model: db.Vehicle,
+                        attributes: ["matricula"],
+                        where: {UserId: userId},
+                        include: [{model: db.Marca, attributes: ["nom"]}, {model: db.Color, attributes: ["nom"]}]
+                    },
+                    {model: db.Area, attributes: ["nom"]}
+                ],
+                attributes: ["import", "dataInici", "dataFi"],
+                where: {
+                    dataFi: {
+                        $gte: new Date(dataFi)
+                    }
+                }
+            })
+        } else {
+            return db.Tiquet.findAll({
+                include: [
+                    {
+                        model: db.Vehicle,
+                        attributes: ["matricula"],
+                        where: {UserId: userId},
+                        include: [{model: db.Marca, attributes: ["nom"]}, {model: db.Color, attributes: ["nom"]}]
+                    },
+                    {model: db.Area, attributes: ["nom"]}
+                ],
+                attributes: ["import", "dataInici", "dataFi"]
+            })
+        }
     };
 
     Tiquet.create = function (tiquet_data, user, t) {

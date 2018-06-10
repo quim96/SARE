@@ -28,21 +28,28 @@
             </div>
         </div>
     </div>
-    <div id="crearVehicle">
-        <div class="row">
-        <h2 class="titolPag">Colors</h2>
-        </div>
-        <div class="clear espai"></div>
-        <div class="border">
-            <div class="form-group">
-                <label>Nom</label>
-                <input class="form-control" type="text" id="nom">
+</div>
+<div id="popupCrearEditar" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <form>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title titolPag"></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Nom</label>
+                        <input class="form-control" type="text" id="nom" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Tancar</button>
+                    <button type="submit" class="btn btn-primary enviar">Enviar</button>
+                </div>
             </div>
-            <div>
-                <button class="btn btn-default tornar">Cancel·lar</button>
-                <button class="btn btn-primary enviar">Enviar</button>
-            </div>
-        </div>
+        </form>
+
     </div>
 </div>
 <div id="popup" class="modal" tabindex="-1" role="dialog">

@@ -1,3 +1,9 @@
+.container{
+  background: white;
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
 .glywhite {
   color: #9d9d9d;
 }
@@ -50,6 +56,10 @@
 
 .espai {
   padding: 8px;
+}
+
+.mtop5 {
+  margin-top: 5px;
 }
 
 .border {
@@ -328,6 +338,11 @@ table.t_estacionament th{
 }
 
 #estacionament {
+  margin: auto;
+  max-width: 700px;
+}
+
+#estacionamentAlert {
   margin: auto;
   max-width: 700px;
 }

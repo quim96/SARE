@@ -242,7 +242,8 @@
         var self = this;
 
         // Initialize
-        $body = $('body');
+        $body = $('#divRellotgeIn');
+        $body.empty();
         console.log($body);
         console.log(this.rellotge);
         $body.append(this.rellotge);

@@ -5,6 +5,7 @@ module.exports = function (app) {
     var Users = require('../controllers/c_user')(app);
     var Orders = require('../controllers/c_orders')(app);
     var Vehicles = require('../controllers/c_vehicles')(app);
+    var Tiquets = require('../controllers/c_tiquets')(app);
 
     var util = require('../util');
 
@@ -22,6 +23,8 @@ module.exports = function (app) {
     router.get('/self/orders', util.isAuthenticated, Orders.getOrders);
 
     router.get('/self/vehicles', util.isAuthenticated, Vehicles.getVehicles);
+
+    router.get('/self/tiquets', util.isAuthenticated, Tiquets.getTiquetsUsuari);
 
     return router;
 }

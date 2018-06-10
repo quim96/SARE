@@ -30,6 +30,7 @@ var TiquetListView = Backbone.View.extend({
         'click #step1': 'showVehicles',
         'click #step2': 'showArea',
         'click #step3': 'showDurada',
+        'click #pagar': 'showPagament',
         'click #cancelar': 'cancelar',
         'click #btnCrear': 'crearEditar',
         'change #colors' : 'updateColor'
@@ -46,7 +47,7 @@ var TiquetListView = Backbone.View.extend({
         $table = this.$el.find('#taulaVehicle');
         $tableArea = this.$el.find('#taulaArea');
         $rellotge = this.$el.find('#divRellotge');
-
+        $pagament = this.$el.find('#pagament');
 
         var marques = this.collection.marcas;
         this.collection.vehicles.each(function(item) {
@@ -80,24 +81,19 @@ var TiquetListView = Backbone.View.extend({
         else if(!this.$el.find('#step2').hasClass('punter')){
             return;
         }
+        this.$el.find('.step').addClass('hidden');
         this.$el.find('.pas').removeClass('active complete disabled punter');
         this.$el.find('#step1').addClass('complete punter');
         this.$el.find('#step2').addClass('active');
         this.$el.find('#step3').addClass('disabled');
         this.$el.find('#step4').addClass('disabled');
 
-
-        $table.addClass('hidden');
-        $rellotge.addClass('hidden');
         $tableArea.removeClass('hidden');
     },
     showDurada: function(id) {
         console.log(Number.isInteger(id));
         if(Number.isInteger(id)) {
-            if (Number.isInteger(idArea)) {
-                this.$el.find('#rellotge').remove();
-                this.$el.find('#divRellotge').append('<div id="rellotge"></div>')
-            }
+
             idArea = id;
         }
         else if(!this.$el.find('#step3').hasClass('punter')){
@@ -108,14 +104,24 @@ var TiquetListView = Backbone.View.extend({
         this.$el.find('#step2').addClass('complete punter');
         this.$el.find('#step3').addClass('active');
         this.$el.find('#step4').addClass('disabled');
-        $table.addClass('hidden');
-        $tableArea.addClass('hidden');
+        this.$el.find('.step').addClass('hidden');
 
-        console.log(this.$el.find('#rellotge'));
+        this.$el.find('.rellotge').clockpicker({minuts: this.collection.arees.get(idArea).get('maxMinuts'), franges: 5});
 
-        this.$el.find('#rellotge').clockpicker({minuts: this.collection.arees.get(idArea).get('maxMinuts'), franges: 5});
+        $rellotge.removeClass('hidden');
 
-        this.$el.find('#rellotge').removeClass('hidden');
+    },
+    showPagament: function() {
+        this.$el.find('.pas').removeClass('active complete disabled punter');
+        this.$el.find('#step1').addClass('complete punter');
+        this.$el.find('#step2').addClass('complete punter');
+        this.$el.find('#step3').addClass('complete punter');
+        this.$el.find('#step4').addClass('active');
+
+        this.$el.find('.step').addClass('hidden');
+
+        $pagament.removeClass('hidden');
+
     },
     cancelar: function() {
         $table.removeClass('hidden');

@@ -16,8 +16,21 @@ module.exports = function (app, dao) {
             })
     };
     Sancio.getAllSancios = function () {
+        return db.Sancio.findAll();
+    };
+    Sancio.getByData = function (data) {
+        var d1 = new Date(new Date(data).setUTCHours(0,0,0,0));
+        var d2 = new Date(new Date(data).setUTCHours(23,59,59,59));
         return db.Sancio.findAll({
-            order: [['nom', 'ASC']]
+            include: [
+                { model: db.Vehicle, attributes:["matricula"], include: [{model: db.Marca, attributes:["nom"] }, {model: db.Color, attributes:["nom"] } ] },
+                { model: db.Area, attributes: ["nom"] }
+            ],
+            where: {
+                data: {
+                    $between: [d1, d2]
+                }
+            }
         });
     };
 

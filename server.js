@@ -69,9 +69,16 @@ app.db.init(app.get('env'))
     .then(function() {return app.db.Rol.create({nom: 'Worker'})})
     .then(function() {return app.db.Area.create({nom: 'Blava', preuMinut: 2.5, maxMinuts: 90})})
     .then(function() {return app.db.Marca.create({nom: 'Audi'})})
-    .then(function() {return app.db.Vehicle.create({ matricula: '4432CGN', MarcaId: 1})})
+    .then(function() {
+        return app.db.User.create({username: 'jo', password: bcrypt.hashSync('jo'), email: 'jo@jo.com', RolId: 1})
+    })
+    .then(function() {
+        return app.db.User.create({username: 'usuari', password: bcrypt.hashSync('usuari'), email: 'user@jo.com', RolId: 2})
+    })
+    .then(function() {return app.db.Vehicle.create({ matricula: '4432CGN', MarcaId: 1, UserId: 2})})
     .then(function() {return app.db.Tiquet.create({dataInici: new Date(), dataFi: '2018-04-23 22:15:00', import: 2.5, VehicleId: 1, AreaId: 1})})
-    .then(function() {return app.db.Tiquet.create({dataInici: '2018-03-02 10:15', dataFi: '2018-04-22 11:15', import: 2.5, VehicleId: 1, AreaId: 1})})
+    .then(function() {return app.db.Tiquet.create({dataInici: '2018-03-02 10:15', dataFi: '2018-05-22 11:15', import: 2.5, VehicleId: 1, AreaId: 1})})
+    .then(function() {return app.db.Sancio.create({ import: 100, data: new Date(), VehicleId: 1, AreaId: 1 })})
 
     //Fi Inserir Colors
     .then(function() {
@@ -101,6 +108,7 @@ app.db.init(app.get('env'))
         app.use('/api/tiquets', require('./routers/r_tiquets')(app));
         app.use('/api/vehicles', require('./routers/r_vehicles')(app));
         app.use('/api/marcas', require('./routers/r_marcas')(app));
+        app.use('/api/sancions', require('./routers/r_sancios')(app));
 
         app.use(function (err, req, res, next) {
             var code = err.code || 500;
@@ -116,7 +124,7 @@ app.db.init(app.get('env'))
 
 
         var port = process.env.OPENSHIFT_NODEJS_PORT || app.get('port');
-        var ip = process.env.OPENSHIFT_NODEJS_IP || "192.168.1.129";
+        var ip = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
 
         http.createServer(app).listen(port, ip, function () {
             console.log("Express server listening on " + ip + ":" + port);

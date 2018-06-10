@@ -1,5 +1,5 @@
 var TiquetModel = Backbone.Model.extend({
-    urlRoot: "/api/tiquets"
+    urlRoot: "/api/users/self/tiquets"
 });
 // Return the model for the module
 module.exports = TiquetModel;

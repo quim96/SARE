@@ -4,15 +4,20 @@ var CollectionOrder = require("../collections/c_orders");
 var CollectionColor = require("../collections/c_colors");
 var CollectionArea = require("../collections/c_arees");
 var CollectionTiquet = require("../collections/c_tiquets");
+var CollectionTiquetUser  = require("../collections/c_tiquetsUsuari");
 var CollectionVehicle = require("../collections/c_vehicles");
 var CollectionMarca = require("../collections/c_marcas");
+var CollectionSancio = require("../collections/c_sancions");
 var UserLogin = require("../views/user/v_login");
 var UserSignup = require("../views/user/v_signup");
 var HeaderView = require("../views/header");
 var OrdersView = require("../views/order/vl_orders");
 var ColorView = require("../views/color/vl_colors");
 var AreaView = require("../views/area/vl_area");
+var MarcaView = require("../views/marca/vl_marques");
+var SancioView = require("../views/sancio/vl_sancions");
 var TiquetView = require("../views/tiquet/vl_tiquets");
+var TiquetUserView = require("../views/tiquetsUsuari/vl_tiquetsUsuari");
 var EstacionamentView = require("../views/estacionament/vl_estacionament");
 
 var Ui = {};
@@ -22,6 +27,8 @@ var colorList = new CollectionColor ({eventBus: EventBus});
 var marcaList = new CollectionMarca ({eventBus: EventBus});
 var areaList = new CollectionArea ({eventBus: EventBus});
 var tiquetList = new CollectionTiquet ({eventBus: EventBus});
+var sancioList = new CollectionSancio ({eventBus: EventBus});
+var tiquetsUsuariList = new CollectionTiquetUser ({eventBus: EventBus});
 var vehicleList = new CollectionVehicle ({eventBus: EventBus});
 
 var $content = $('#content');
@@ -82,6 +89,19 @@ Ui.switchContent = function (widget) {
                 Ui.switchContent('login');
             break;
         }
+        case 'marques': {
+            localStorage.setItem('last', 'marques');
+            if (localStorage.hasItem('user')) {
+               marcaList.fetch({
+                    success: function () {
+                        lastContent = new MarcaView({el: $content, eventBus: EventBus, collection: marcaList}).render();
+                    },
+                    error: Ui.error
+                });
+            } else
+                Ui.switchContent('login');
+            break;
+        }
         case 'tiquetsDia': {
             localStorage.setItem('last', 'tiquetsDia');
             if (localStorage.hasItem('user')) {
@@ -112,28 +132,51 @@ Ui.switchContent = function (widget) {
                 Ui.switchContent('login');
             break;
         }
+        case 'homeUsuari': {
+            localStorage.setItem('last', 'homeUsuari');
+            if (localStorage.hasItem('user')) {
+                tiquetsUsuariList.fetch({
+                    data: {dataFi: new Date()},
+                    processData: true,
+                    success: function () {
+                        lastContent = new TiquetUserView({titol: 'Tiquets Actius', el: $content, eventBus: EventBus, collection: tiquetsUsuariList}).render();
+                    },
+                    error: Ui.error
+                });
+            } else
+                Ui.switchContent('login');
+            break;
+        }
         case 'estacionament': {
             localStorage.setItem('last', 'estacionament');
             if (localStorage.hasItem('user')) {
-                vehicleList.fetch({
-                    success: function (){
-                        marcaList.fetch({
-                            success: function (){
-                                areaList.fetch({
-                                    success: function (){
-                                        lastContent = new EstacionamentView({
-                                            el: $content, eventBus: EventBus, collection: {
-                                                vehicles: vehicleList,
-                                                colors: colorList,
-                                                marcas: marcaList,
-                                                arees: areaList
-                                            }
-                                        }).render();
-                                    }
-                                })
-                            }
-                        });
-                    }
+                $.when(vehicleList.fetch(), marcaList.fetch(), areaList.fetch()).then(function () {
+                    lastContent = new EstacionamentView({
+                        el: $content, eventBus: EventBus, collection: {
+                            vehicles: vehicleList,
+                            colors: colorList,
+                            marcas: marcaList,
+                            arees: areaList
+                        }
+                    }).render();
+                });
+            } else
+                Ui.switchContent('login');
+            break;
+        }
+        case 'sancions': {
+            localStorage.setItem('last', 'sancio');
+            if (localStorage.hasItem('user')) {
+
+                sancioList.fetch({
+                    data: {
+                        data: new Date()
+                    },
+                    processData: true,
+                    success: function () {
+                        lastContent = new SancioView({titol: 'Sancions', el: $content, eventBus: EventBus, collection: sancioList}).render();
+                    },
+                    error: Ui.error
                 });
             } else
                 Ui.switchContent('login');
@@ -189,10 +232,13 @@ EventBus.on('ui:showError', Ui.error);
 EventBus.on('ui:switch:signup', Ui.showSignup);
 EventBus.on('ui:switch:orders', Ui.switchContent.bind(null, 'orders'));
 EventBus.on('ui:switch:colors', Ui.switchContent.bind(null, 'colors'));
+EventBus.on('ui:switch:marques', Ui.switchContent.bind(null, 'marques'));
 EventBus.on('ui:switch:arees', Ui.switchContent.bind(null, 'arees'));
 EventBus.on('ui:switch:tiquetsDia', Ui.switchContent.bind(null, 'tiquetsDia'));
 EventBus.on('ui:switch:tiquetsAct', Ui.switchContent.bind(null, 'tiquetsAct'));
 EventBus.on('ui:switch:estacionament', Ui.switchContent.bind(null, 'estacionament'));
+EventBus.on('ui:switch:homeUsuari', Ui.switchContent.bind(null, 'homeUsuari'));
+EventBus.on('ui:switch:sancions', Ui.switchContent.bind(null, 'sancions'));
 
 
 module.exports = Ui;

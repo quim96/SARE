@@ -5,5 +5,4 @@ var TiquetCollection = Backbone.Collection.extend({
     url: "/api/tiquets"
 });
 
-
 module.exports = TiquetCollection;
